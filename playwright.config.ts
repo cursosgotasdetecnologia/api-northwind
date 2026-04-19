@@ -14,7 +14,7 @@ export default defineConfig({
     }]
   ],
   use: {
-    baseURL: 'https://northwind-test-platform.vercel.app',
+    baseURL: 'https://northwind-test-platform.vercel.app/api/v1/', 
     extraHTTPHeaders: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
