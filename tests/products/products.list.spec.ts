@@ -1,43 +1,23 @@
-import { test, request, expect, APIResponse } from "@playwright/test";
-import dotenv from 'dotenv'
-
-dotenv.config();
-
-
+import { test, expect } from '../../fixtures/auth.fixture';
 
 test.describe('Listagem de Produtos', () => {
 
-    let token: string;
-
-    test.beforeEach(async ({ request }) => {
-
-        const login = await request.post('auth/login', {
-            data: {
-                email: process.env.EMAIL!,
-                password: process.env.PASSWORD!
-            }
-        })
-        const body = await login.json();
-        token = body.data.token;
-    });
-
-
-    test('Acesso com sucesso ao endpoint de filtro de produtos', async ({ request }) => {
+    test('Acesso com sucesso ao endpoint de filtro de produtos', async ({ request, authToken }) => {
 
         const response = await request.get('products?page=1&limit=10', {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${authToken}`
             }
         });
         expect(response.status()).toBe(200);
 
     })
 
-    test('Deve filtrar produtos com todos os parâmetros', async ({ request }) => {
+    test('Deve filtrar produtos com todos os parâmetros', async ({ request, authToken }) => {
 
         const response = await request.get('products', {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${authToken}`
             },
             params: {
                 page: 1,
@@ -53,11 +33,11 @@ test.describe('Listagem de Produtos', () => {
         console.log('Produtos retornados', body.data);
     });
 
-    test('Deve exibir categorias de produtos com fornecedores', async ({ request }) => {
+    test('Deve exibir categorias de produtos com fornecedores', async ({ request, authToken }) => {
 
         const response = await request.get('products', {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${authToken}`
             },
             params: {
                 category_id: 2,
@@ -70,11 +50,11 @@ test.describe('Listagem de Produtos', () => {
         console.log('Produtos retornados', body.data);
     });
 
-    test('Deve retornar produtos paginados', async ({ request }) => {
+    test('Deve retornar produtos paginados', async ({ request, authToken }) => {
 
         const response = await request.get('products', {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${authToken}`
             },
             params: {
                 page: 1,
