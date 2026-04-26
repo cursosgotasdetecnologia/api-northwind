@@ -28,5 +28,95 @@
             "status": 400,
             "mensagem": "O preço deve ser um valor positivo maior que zero."
         }
+    },
+    "produto_duplicado": {
+        "tipo": "erro",
+        "dados": {
+            "name": "Moeruse Gamer RGB",
+            "price": 299.9,
+            "stock_quantity": 50,
+            "sku": "MeGP-2024",
+            "category_id": 10,
+            "supplier_id": 10
+        },
+        "esperado": {
+            "status": 409,
+            "mensagem": "Já existe um produto com esse nome/slug."
+        }
+    },
+    "fornecedor_inexistente": {
+        "tipo": "erro",
+        "dados": {
+            "name": "Moetruse Gamer RGB",
+            "price": 299.9,
+            "stock_quantity": 50,
+            "sku": "MteGP-2024",
+            "category_id": 10,
+            "supplier_id": 989
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Fornecedor selecionado não existe. Escolha um fornecedor válido."
+        }
+    },
+    "sku_inexistente": {
+        "tipo": "erro",
+        "dados": {
+            "name": "Maionyesett  RGB",
+            "price": 299.9,
+            "stock_quantity": 50,
+            "sku": null,
+            "category_id": 10,
+            "supplier_id": 10
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Campos obrigatórios não preenchidos: sku."
+        }
+    },
+    "categoria_inexistente": {
+        "tipo": "erro",
+        "dados": {
+            "name": "Moreruse Gamer RGB",
+            "price": 30.9,
+            "stock_quantity": 50,
+            "sku": "MOGP-2024",
+            "category_id": 15640,
+            "supplier_id": 10
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Categoria selecionada não existe. Escolha uma categoria válida."
+        }
+    },
+    "sku_duplicado": {
+        "tipo": "erro",
+        "dados": {
+            "name": "Moerruse Gamer RGB",
+            "price": 299.9,
+            "stock_quantity": 50,
+            "sku": "FOR-2024",
+            "category_id": 10,
+            "supplier_id": 190
+        },
+        "esperado": {
+            "status": 409,
+            "mensagem": "Já existe um produto com esse SKU."
+        }
+    },
+    "produto_null": {
+        "tipo": "erro",
+        "dados": {
+            "name": null,
+            "price": 299.9,
+            "stock_quantity": 50,
+            "sku": "MeGP-2024",
+            "category_id": 10,
+            "supplier_id": 190
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Campos obrigatórios não preenchidos: name."
+        }
     }
 }

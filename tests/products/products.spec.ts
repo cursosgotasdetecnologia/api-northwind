@@ -20,24 +20,80 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             expect(response.status()).toBe(cenario.esperado.status);
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
+        test('Deve validar produto já cadastrado', async ({ request, authToken }) => {
+            const cenario = produtosDados.produto_duplicado;
 
-        test('Deve criar um produto com sucesso e gerar o slug automaticamente', async ({ request, authToken }) => {
+            const response = await request.post('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
-        test('Deve impedir a criação de produtos com SKU ou nome duplicados', async ({ request, authToken }) => {
+        test('Deve validar produto null no cadastro', async ({ request, authToken }) => {
+            const cenario = produtosDados.produto_null;
+
+            const response = await request.post('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
-        test('Deve validar a obrigatoriedade de todos os campos do cadastro', async ({ request, authToken }) => {
+        test('Deve impedir produto com sku duplicado', async ({ request, authToken }) => {
+            const cenario = produtosDados.sku_duplicado;
+
+            const response = await request.post('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
-        test('Deve validar os tipos de dados e limites (preço > 0, estoque não negativo)', async ({ request, authToken }) => {
+        test('Deve impedir criar um produto com sku não informado', async ({ request, authToken }) => {
+            const cenario = produtosDados.sku_inexistente;
+
+            const response = await request.post('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
+        test('Deve impedir criar um produto com fornecedor inexistente', async ({ request, authToken }) => {
+            const cenario = produtosDados.fornecedor_inexistente;
+
+            const response = await request.post('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+        });
+        test('Deve impedir criar um produto com categoria inexistente', async ({ request, authToken }) => {
+            const cenario = produtosDados.categoria_inexistente;
+
+            const response = await request.post('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+        });
+
     });
 
     test.describe('Consulta e Busca de Produtos ', () => {
         test('Deve permitir a listagem de produtos com paginação simples', async ({ request, authToken }) => {
 
             const response = await request.get('products?page=1&limit=10', {
-                headers: {
-                    Authorization: `Bearer ${authToken}`
-                }
+                headers: { Authorization: `Bearer ${authToken}` }
             });
             expect(response.status()).toBe(200);
 
