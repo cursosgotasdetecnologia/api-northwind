@@ -1,15 +1,33 @@
 import { test, expect } from '../../fixtures/auth.fixture';
+import produtosDados from '../../data/produtos_dados.json';
+
 
 test.describe('Gestão de Catálogo de Produtos', () => {
 
     test.describe('Criação de Novos Produtos', () => {
-        test('Deve criar um produto com sucesso e gerar o slug automaticamente', async ({ request, authToken }) => {               
+        test('Deve validar erro de preço negativo', async ({ request, authToken }) => {
+            const cenario = produtosDados.preco_negativo;
+
+            console.log(cenario.dados)
+
+            const response = await request.post('products', {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
-         test('Deve impedir a criação de produtos com SKU ou nome duplicados', async ({ request, authToken }) => {               
+
+        test('Deve criar um produto com sucesso e gerar o slug automaticamente', async ({ request, authToken }) => {
         });
-         test('Deve validar a obrigatoriedade de todos os campos do cadastro', async ({ request, authToken }) => {               
+        test('Deve impedir a criação de produtos com SKU ou nome duplicados', async ({ request, authToken }) => {
         });
-         test('Deve validar os tipos de dados e limites (preço > 0, estoque não negativo)', async ({ request, authToken }) => {               
+        test('Deve validar a obrigatoriedade de todos os campos do cadastro', async ({ request, authToken }) => {
+        });
+        test('Deve validar os tipos de dados e limites (preço > 0, estoque não negativo)', async ({ request, authToken }) => {
         });
     });
 
@@ -57,9 +75,9 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             const body = await response.json();
             console.log('Produtos retornados', body.data);
         });
-        test('Deve permitir a ordenação de produtos por múltiplos campos (nome, preço, estoque)', async ({ request, authToken }) => {           
+        test('Deve permitir a ordenação de produtos por múltiplos campos (nome, preço, estoque)', async ({ request, authToken }) => {
         });
-        test('Deve validar parâmetros de página e limite como números positivos', async ({ request, authToken }) => {           
+        test('Deve validar parâmetros de página e limite como números positivos', async ({ request, authToken }) => {
         });
     });
 
@@ -116,9 +134,9 @@ test.describe('Gestão de Catálogo de Produtos', () => {
 
 
         });
-        test('Deve regerar o slug do produto apenas quando o nome for alterado', async ({ request, authToken }) => {           
+        test('Deve regerar o slug do produto apenas quando o nome for alterado', async ({ request, authToken }) => {
         });
-        test('Deve validar a unicidade de SKU e nome durante a atualização', async ({ request, authToken }) => {           
+        test('Deve validar a unicidade de SKU e nome durante a atualização', async ({ request, authToken }) => {
         });
     });
 
@@ -141,7 +159,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             expect(check.status()).toBe(404);
 
         });
-        test('Deve retornar erro 404 ao tentar remover um produto que não existe', async ({ request, authToken }) => {           
+        test('Deve retornar erro 404 ao tentar remover um produto que não existe', async ({ request, authToken }) => {
         });
     });
 
@@ -162,12 +180,12 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             const body = await response.json();
             console.log('Produtos retornados', body.data);
         });
-    });  
+    });
 
     test.describe('Gerenciamento de Mídia', () => {
-         test('Deve permitir o upload de imagens PNG para um produto específico', async ({ request, authToken }) => {               
+        test('Deve permitir o upload de imagens PNG para um produto específico', async ({ request, authToken }) => {
         });
-         test('Deve validar o formato e o tamanho máximo do arquivo de imagem', async ({ request, authToken }) => {               
+        test('Deve validar o formato e o tamanho máximo do arquivo de imagem', async ({ request, authToken }) => {
         });
     });
 });

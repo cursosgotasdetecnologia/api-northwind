@@ -1,0 +1,32 @@
+{
+    "valido": {
+        "tipo": "sucesso",
+        "dados": {
+            "name": "Mouser Gamer RGB",
+            "price": 299.9,
+            "stock_quantity": 50,
+            "sku": "MGP-20245",
+            "category_id": 10,
+            "supplier_id": 10
+        },
+        "esperado": {
+            "status": 201,
+            "mensagem": "Produto criado com sucesso!"
+        }
+    },
+    "preco_negativo": {
+        "tipo": "erro",
+        "dados": {
+            "name": "Produto Erro Preço",
+            "price": -10.0,
+            "stock_quantity": 5,
+            "sku": "ERR-PRICE",
+            "category_id": 1,
+            "supplier_id": 1
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "O preço deve ser um valor positivo maior que zero."
+        }
+    }
+}
