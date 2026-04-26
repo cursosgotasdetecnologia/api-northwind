@@ -1,12 +1,18 @@
 import { test, expect } from '../../fixtures/auth.fixture';
-import produtosDados from '../../data/produtos_dados.json';
+import dadosCadastro from '../../data/json/products/produtos_dados_cadastro.json';
+import dadosExclusao from '../../data/json/products/produtos_dados_exclusao.json';
+import dadosEspecificos from '../../data/json/products/produtos_dados_especificos.json';
+import daosAtualizacao from '../../data/json/products/produtos_dados_atualizacao.json';
+import dadosFiltros from '../../data/json/products/produtos_dados_filtros.json';
+import dadosMidia from '../../data/json/products/produtos_dados_midia.json';
+
 
 
 test.describe('Gestão de Catálogo de Produtos', () => {
 
     test.describe('Criação de Novos Produtos', () => {
         test('Deve validar erro de preço negativo', async ({ request, authToken }) => {
-            const cenario = produtosDados.preco_negativo;
+            const cenario = dadosCadastro.preco_negativo;
 
             console.log(cenario.dados)
 
@@ -21,7 +27,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
         test('Deve validar produto já cadastrado', async ({ request, authToken }) => {
-            const cenario = produtosDados.produto_duplicado;
+            const cenario = dadosCadastro.produto_duplicado;
 
             const response = await request.post('products', {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -32,7 +38,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
         test('Deve validar produto null no cadastro', async ({ request, authToken }) => {
-            const cenario = produtosDados.produto_null;
+            const cenario = dadosCadastro.produto_null;
 
             const response = await request.post('products', {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -43,7 +49,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
         test('Deve impedir produto com sku duplicado', async ({ request, authToken }) => {
-            const cenario = produtosDados.sku_duplicado;
+            const cenario = dadosCadastro.sku_duplicado;
 
             const response = await request.post('products', {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -54,7 +60,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
         test('Deve impedir criar um produto com sku não informado', async ({ request, authToken }) => {
-            const cenario = produtosDados.sku_inexistente;
+            const cenario = dadosCadastro.sku_inexistente;
 
             const response = await request.post('products', {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -65,7 +71,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
         test('Deve impedir criar um produto com fornecedor inexistente', async ({ request, authToken }) => {
-            const cenario = produtosDados.fornecedor_inexistente;
+            const cenario = dadosCadastro.fornecedor_inexistente;
 
             const response = await request.post('products', {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -76,7 +82,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
         test('Deve impedir criar um produto com categoria inexistente', async ({ request, authToken }) => {
-            const cenario = produtosDados.categoria_inexistente;
+            const cenario = dadosCadastro.categoria_inexistente;
 
             const response = await request.post('products', {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -202,10 +208,9 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             const productId = 380;
 
             const response = await request.delete(`products/${productId}`, {
-                headers: {
-                    Authorization: `Bearer ${authToken}`
-                },
+                headers: { authorization: `Bearer ${authToken}` },
             });
+
             expect(response.status()).toBe(200);
 
             // A Prova Real
@@ -217,6 +222,20 @@ test.describe('Gestão de Catálogo de Produtos', () => {
         });
         test('Deve retornar erro 404 ao tentar remover um produto que não existe', async ({ request, authToken }) => {
         });
+
+        test('Deve validar exclusão informando id inexistente', async ({ request, authToken }) => {
+            const cenario = dadosExclusao.produto_inexistente
+            const response = await request.delete(`products/${cenario.dados.id}`, {
+                headers: { Authorization: `Bearer ${authToken}` },
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+        });
+
+
+
+
     });
 
     test.describe('Listagem de Produtos', () => {

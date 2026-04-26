@@ -1,0 +1,54 @@
+{
+    "valido": {
+        "tipo": "sucesso",
+        "dados": {
+            "id": "34"
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Produto excluido com sucesso!"
+        }
+    },
+    "produto_nao_encontrado": {
+        "tipo": "erro",
+        "dados": {
+            "id": "23"
+        },
+        "esperado": {
+            "status": 404,
+            "mensagem": "Produto com ID 23 não encontrado."
+        }
+    },
+    "produto_inexistente": {
+        "tipo": "erro",
+        "dados": {
+            "id": "4444"
+        },
+        "esperado": {
+            "status": 404,
+            "mensagem": "Produto com ID 4444 não encontrado."
+        }
+    },
+    "produto_null": {
+        "tipo": "erro",
+        "dados": {
+            "id": null
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "ID do produto inválido. Deve ser um número positivo."
+        }
+    },
+    "produto_vazio": {
+        "tipo": "erro",
+        "dados": {
+            "id": null
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "ID do produto inválido. Deve ser um número positivo."
+        }
+    }
+
+
+}
