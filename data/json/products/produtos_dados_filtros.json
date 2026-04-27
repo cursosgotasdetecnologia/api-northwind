@@ -1,0 +1,64 @@
+{
+    "produtos_paginados": {
+        "tipo": "sucesso",
+        "params": {
+            "page": 1,
+            "limit": 4
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Produtos carregados com sucesso."
+        }
+    },
+    "produtos_paginados_ordenados": {
+        "tipo": "sucesso",
+        "params": {
+            "page": 1,
+            "limit": 15,
+            "sortBy": "name",
+            "order":"asc"
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Produtos carregados com sucesso."
+        }
+    },
+    "produtos_segunda_pagina": {
+        "tipo": "sucesso",
+        "params": {
+            "page": 2,
+            "limit": 4
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Produtos carregados com sucesso."
+        }
+    },
+    "listagem_geral": {
+        "tipo": "erro",
+        "esperado": {
+            "status": 200,
+            "mensagem": "Categorias carregadas com sucesso!"
+        }
+    },
+    "produtos_categoria10": {
+        "tipo": "sucesso",
+        "params": {
+            "category_id": 10
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Produtos carregados com sucesso."
+        }
+    },
+    "produtos_fornecedor10": {
+        "tipo": "sucesso",
+        "params": {
+            "supplier_id": 10
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Produtos carregados com sucesso."
+        }
+   }
+}

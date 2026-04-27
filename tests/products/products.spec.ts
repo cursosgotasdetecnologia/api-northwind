@@ -269,23 +269,125 @@ test.describe('Gestão de Catálogo de Produtos', () => {
     });
 
     test.describe('Listagem de Produtos', () => {
-        test('Deve retornar produtos paginados', async ({ request, authToken }) => {
+        test('Deve retornar produtos paginados no limite definido de 4 itens', async ({ request, authToken }) => {
+            const cenario = dadosFiltros.produtos_paginados
 
             const response = await request.get('products', {
-                headers: {
-                    Authorization: `Bearer ${authToken}`
-                },
-                params: {
-                    page: 1,
-                    limit: 5
-                }
+                headers: { Authorization: `Bearer ${authToken}` },
+                params: cenario.params
             });
-            expect(response.status()).toBe(200);
+            expect(response.status()).toBe(cenario.esperado.status);
 
             const body = await response.json();
-            console.log('Produtos retornados', body.data);
+            // retornou exatamente o que foi pedido
+            expect(body.data.length).toBe(4)
+
+
+            // metadados de paginação presentes
+            expect(body.pagination).toHaveProperty('page')
+            expect(body.pagination).toHaveProperty('total')
+            expect(body.pagination).toHaveProperty('limit')
+
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+
         });
-        
+
+        test('Deve retornar produtos da segunda página e no limite definido de 4 itens', async ({ request, authToken }) => {
+            const cenario = dadosFiltros.produtos_segunda_pagina
+
+            const response = await request.get('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                params: cenario.params
+            });
+            expect(response.status()).toBe(cenario.esperado.status);
+
+            const body = await response.json();
+            // retornou exatamente o que foi pedido
+            expect(body.data.length).toBe(4)
+            // metadados de paginação presentes
+            expect(body.pagination).toHaveProperty('page')
+            expect(body.pagination).toHaveProperty('total')
+            expect(body.pagination).toHaveProperty('limit')
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+            // página correta
+            expect(body.pagination.page).toBe(2)
+            expect(body.pagination.limit).toBe(4)
+        });
+
+        test('Deve retornar produtos da categoriade ID 10', async ({ request, authToken }) => {
+            const cenario = dadosFiltros.produtos_categoria10
+
+            const response = await request.get('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                params: cenario.params
+            });
+            expect(response.status()).toBe(cenario.esperado.status);
+
+            const body = await response.json();
+
+            // metadados de paginação presentes
+            expect(body.pagination).toHaveProperty('page')
+            expect(body.pagination).toHaveProperty('total')
+            expect(body.pagination).toHaveProperty('limit')
+
+            body.data.forEach((produto: any) => {
+                expect(produto.category_id).toBe(cenario.params.category_id)
+            })
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+        });
+
+        test('Deve retornar produtos do fornecedor de ID 10', async ({ request, authToken }) => {
+            const cenario = dadosFiltros.produtos_fornecedor10
+
+            const response = await request.get('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                params: cenario.params
+            });
+            expect(response.status()).toBe(cenario.esperado.status);
+
+            const body = await response.json();
+
+            // metadados de paginação presentes
+            expect(body.pagination).toHaveProperty('page')
+            expect(body.pagination).toHaveProperty('total')
+            expect(body.pagination).toHaveProperty('limit')
+
+            body.data.forEach((produto: any) => {
+                expect(produto.supplier_id).toBe(cenario.params.supplier_id)
+            })
+
+
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+        });
+
+        test('Deve validar ordenação por nome os produtos listados', async ({ request, authToken }) => {
+            const cenario = dadosFiltros.produtos_paginados_ordenados
+
+            const response = await request.get('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                params: cenario.params
+            });
+            expect(response.status()).toBe(cenario.esperado.status);
+
+            const body = await response.json();
+
+            // metadados de paginação presentes
+            expect(body.pagination).toHaveProperty('page')
+            expect(body.pagination).toHaveProperty('total')
+            expect(body.pagination).toHaveProperty('limit')
+
+            // valida ordenação de todos os itens
+            for (let i = 0; i < body.data.length - 1; i++) {
+                const atual = body.data[i].name
+                const proximo = body.data[i + 1].name
+                expect(atual <= proximo).toBeTruthy()
+            }
+
+
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+        });
+
     });
 
     test.describe('Gerenciamento de Mídia', () => {

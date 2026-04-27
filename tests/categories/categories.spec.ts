@@ -43,11 +43,11 @@ test.describe('Gestão de Categorias', () => {
     });
 
     /* Este teste não se aplica */
-    test('Deve validar parâmetros de paginação como números positivos', async ({ request, authToken }) => {
-    });
+    //test('Deve validar parâmetros de paginação como números positivos', async ({ request, authToken }) => {
+    //});
     /* Este teste não se aplica */
-    test('Deve garantir consistência da estrutura JSON de resposta', async ({ request, authToken }) => {
-    });
+    //test('Deve garantir consistência da estrutura JSON de resposta', async ({ request, authToken }) => {
+    //});
 
     test.describe('Criação de Categoria', () => {
 
