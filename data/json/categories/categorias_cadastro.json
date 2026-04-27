@@ -1,0 +1,61 @@
+{
+    "valido": {
+        "tipo": "sucesso",
+        "dados": {
+            "name": "Categoria 002",
+            "description": "Categoria 002 Automacao"
+        },
+        "esperado": {
+            "status": 201,
+            "mensagem": "Categoria criada com sucesso!"
+        }
+    },
+    "categoria_duplicada": {
+        "tipo": "erro",
+        "dados": {
+            "name": "Categoria 002",
+            "description": "Categoria 002 Automacao"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Categoria com dados duplicados."
+        }
+    },
+    "categoria_nome_limite_acima": {
+        "tipo": "erro",
+        "dados": {
+            "name": "Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002Categoria 002",
+            "description": "2teseo"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "value too long for type character varying(100)"
+        }
+    },
+    "categoria_descricao_limite_acima": {
+        "tipo": "erro",
+        "dados": {
+            "name": "Cat3",
+            "description": "DEscriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao locriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfaDEscriçao lonfa2teseo"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "value too long for type character varying(100)"
+        }
+    },
+    "categoria_inexistente": {
+        "tipo": "erro",
+        "dados": {
+            "name": "Moreruse Gamer RGB",
+            "price": 30.9,
+            "stock_quantity": 50,
+            "sku": "MOGP-2024",
+            "category_id": 15640,
+            "supplier_id": 10
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Categoria selecionada não existe. Escolha uma categoria válida."
+        }
+    }   
+}

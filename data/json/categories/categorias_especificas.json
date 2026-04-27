@@ -2,16 +2,12 @@
     "valido": {
         "tipo": "sucesso",
         "dados": {
-            "name": "CanrA Gamer RGB",
-            "price": 2999.9,
-            "stock_quantity": 50,
-            "sku": "MPA-20245",
-            "category_id": 10,
-            "supplier_id": 10
+            "name": "Categoria 001",
+            "description": "Categoria 001 Automacao"
         },
         "esperado": {
             "status": 201,
-            "mensagem": "Produto criado com sucesso!"
+            "mensagem": "Categoria criada com sucesso!"
         }
     },
     "preco_negativo": {

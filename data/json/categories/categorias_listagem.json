@@ -1,0 +1,50 @@
+{
+    "listagem_paginacao": {
+        "tipo": "sucesso",
+        "params": {
+            "page": 1,
+            "limit": 10
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Categorias carregadas com sucesso!"
+        }
+    },
+    "listagem_geral": {
+        "tipo": "erro",
+        "esperado": {
+            "status": 200,
+            "mensagem": "Categorias carregadas com sucesso!"
+        }
+    },
+    "listagem_sem_token": {
+        "tipo": "erro",
+         "dados": {
+            "id": 13
+        },
+        "esperado": {
+            "status": 401,
+            "mensagem": "Token ausente"
+        }
+    },
+     "listagem_especifica": {
+        "tipo": "erro",
+        "dados": {
+            "id": 13
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Categoria encontrada com sucesso."
+        }
+    },
+     "listagem_inexistente": {
+        "tipo": "erro",
+        "dados": {
+            "id": 13987
+        },
+        "esperado": {
+            "status": 404,
+            "mensagem": "Categoria encontrada com sucesso."
+        }
+    }
+}

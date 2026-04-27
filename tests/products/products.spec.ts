@@ -11,6 +11,34 @@ import dadosMidia from '../../data/json/products/produtos_dados_midia.json';
 test.describe('Gestão de Catálogo de Produtos', () => {
 
     test.describe('Criação de Novos Produtos', () => {
+        test('Deve cadastrar produto com retorno de dados registrados', async ({ request, authToken }) => {
+            const cenario = dadosCadastro.valido;
+            const response = await request.post('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+            // campos obrigatórios presentes
+            expect(body.data).toHaveProperty('name')
+            expect(body.data).toHaveProperty('price')
+            expect(body.data).toHaveProperty('stock_quantity')
+            expect(body.data).toHaveProperty('sku')
+
+            // tipos corretos
+            expect(typeof body.data.id).toBe('number')
+            expect(typeof body.data.name).toBe('string')
+            expect(typeof body.data.price).toBe('number')
+
+            // valores fazem sentido de negócio
+            expect(body.data.price).toBeGreaterThan(600)
+            expect(body.data.stock_quantity).toBeGreaterThanOrEqual(0)
+            expect(body.data.name.length).toBeGreaterThan(0)
+
+
+        });
         test('Deve validar erro de preço negativo', async ({ request, authToken }) => {
             const cenario = dadosCadastro.preco_negativo;
 
@@ -47,6 +75,12 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             const body = await response.json();
             expect(response.status()).toBe(cenario.esperado.status);
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+            const headers = response.headers()
+            expect(headers['content-type']).toContain('application/json')
+            expect(headers['content-type']).toBeDefined()
+
+
         });
         test('Deve impedir produto com sku duplicado', async ({ request, authToken }) => {
             const cenario = dadosCadastro.sku_duplicado;
@@ -232,10 +266,6 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             expect(response.status()).toBe(cenario.esperado.status);
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
-
-
-
-
     });
 
     test.describe('Listagem de Produtos', () => {
@@ -255,6 +285,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
             const body = await response.json();
             console.log('Produtos retornados', body.data);
         });
+        
     });
 
     test.describe('Gerenciamento de Mídia', () => {
