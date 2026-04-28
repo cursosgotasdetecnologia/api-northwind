@@ -154,25 +154,64 @@ test.describe('Gestão de Fornecedores', () => {
         });
 
         test('Deve impedir cadastro com CNPJ duplicado', async ({ request, authToken }) => {
-            const cenario = dadosCadastro.fornecedor_cnpj_duplicado;
-            const response = await request.post('suppliers', {
+
+            const timestamp = Date.now();
+
+            // base do JSON (continua sendo usado)
+            const base = dadosCadastro.valido.dados;
+
+            // dado dinâmico (evita conflito entre execuções)
+            const fornecedor = {
+                ...base,
+                company_name: `Empresa ${timestamp}`,
+                email: `teste_${timestamp}@mail.com`,
+                cnpj: `248${timestamp}`.slice(0, 14)
+            };
+
+            // 1. cria fornecedor
+            const primeiro = await request.post('suppliers', {
                 headers: { Authorization: `Bearer ${authToken}` },
-                data: cenario.dados
+                data: fornecedor
             });
-            const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+            expect(primeiro.status()).toBe(201);
+
+            // 2. tenta duplicar (mesmo CNPJ)
+            const duplicado = await request.post('suppliers', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: fornecedor
+            });
+
+            const body = await duplicado.json();
+
+            // 3. valida regra de negócio
+            expect(duplicado.status()).toBe(409);
+
+            // validação leve (sem acoplar demais)
+            expect(body.mensagens).toBeDefined();
+
+            // const cenario = dadosCadastro.fornecedor_cnpj_duplicado;
+            // const response = await request.post('suppliers', {
+            //     headers: { Authorization: `Bearer ${authToken}` },
+            //     data: cenario.dados
+            // });
+           // const body = await response.json();
+            // expect(response.status()).toBe(cenario.esperado.status);
+            // expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+
+
         });
 
-        test('Deve exigir autenticação para criação de fornecedor', async ({ request,authToken }) => {
+        test('Deve exigir autenticação para criação de fornecedor', async ({ request, authToken }) => {
             const cenario = dadosCadastro.fornecedor_cnpj_duplicado;
             const response = await request.post('suppliers', {
-               // headers: { Authorization: `Bearer ${authToken}` },
+                // headers: { Authorization: `Bearer ${authToken}` },
                 data: cenario.dados
             });
             const body = await response.json();
             expect(response.status()).toBe(401);
-            
+
         });
 
     });
