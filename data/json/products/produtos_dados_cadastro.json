@@ -2,11 +2,11 @@
     "valido": {
         "tipo": "sucesso",
         "dados": {
-            "name": "CanrA Gamer RGB",
-            "price": 2999.9,
-            "stock_quantity": 50,
-            "sku": "MPA-20245",
-            "category_id": 10,
+            "name": "ProdutoCiclos Duplo Validado em Aninhamentos com Estruuras",
+            "price": 1234,
+            "stock_quantity": 350,
+            "sku": "CICLOSs-0078",
+            "category_id": 13,
             "supplier_id": 10
         },
         "esperado": {

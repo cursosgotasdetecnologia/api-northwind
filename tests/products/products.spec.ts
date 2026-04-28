@@ -39,6 +39,38 @@ test.describe('Gestão de Catálogo de Produtos', () => {
 
 
         });
+        test('Deve validar estrutura do produto criado', async ({ request, authToken }) => {
+            const cenario = dadosCadastro.valido;
+            const response = await request.post('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+            // campos obrigatórios presentes
+            expect(body.data).toHaveProperty('name')
+            expect(body.data).toHaveProperty('price')
+            expect(body.data).toHaveProperty('stock_quantity')
+            expect(body.data).toHaveProperty('sku')
+            expect(body.data).toHaveProperty('category_id')
+            expect(body.data).toHaveProperty('supplier_id')
+
+            // tipos corretos
+            expect(typeof body.data.id).toBe('number')
+            expect(typeof body.data.name).toBe('string')
+            expect(typeof body.data.price).toBe('number')
+            expect(typeof body.data.stock_quantity).toBe('number')
+
+            // valores batem com o que foi enviado
+            expect(body.data.name).toBe(cenario.dados.name)
+            expect(body.data.price).toBe(cenario.dados.price)
+            expect(body.data.sku).toBe(cenario.dados.sku)
+            expect(body.data.category_id).toBe(cenario.dados.category_id)
+            expect(body.data.supplier_id).toBe(cenario.dados.supplier_id)
+
+        });
         test('Deve validar erro de preço negativo', async ({ request, authToken }) => {
             const cenario = dadosCadastro.preco_negativo;
 
@@ -173,8 +205,79 @@ test.describe('Gestão de Catálogo de Produtos', () => {
         });
         test('Deve permitir a ordenação de produtos por múltiplos campos (nome, preço, estoque)', async ({ request, authToken }) => {
         });
-        test('Deve validar parâmetros de página e limite como números positivos', async ({ request, authToken }) => {
+        test('Deve validar aninhamento de categorias e fornecedores', async ({ request, authToken }) => {
+
+            const cenario = dadosEspecificos.produto_existente
+
+            const response = await request.get(`products/${cenario.dados.id}`, {
+                headers: { Authorization: `Bearer ${authToken}` }
+            })
+
+            expect(response.status()).toBe(cenario.esperado.status)
+
+            const body = await response.json()
+
+            // mensagem de sucesso
+            expect(body.mensagens).toContain(cenario.esperado.mensagem)
+
+            // campos principais
+            expect(body.data).toHaveProperty('id')
+            expect(body.data).toHaveProperty('name')
+            expect(body.data).toHaveProperty('sku')
+            expect(body.data).toHaveProperty('price')
+            expect(body.data).toHaveProperty('stock_quantity')
+
+            // objetos aninhados
+            console.log('Categoria:', body.data.categories.name)
+            console.log('Fornecedor:', body.data.suppliers.company_name)
+
+            expect(body.data.categories.name.length).toBeGreaterThan(0)
+            expect(body.data.suppliers.company_name.length).toBeGreaterThan(0)
+
+            // tipos dos aninhados
+            expect(typeof body.data.categories.name).toBe('string')
+            expect(typeof body.data.suppliers.company_name).toBe('string')
+
+
+
         });
+        test('Deve validar um produto conhecido de uma lista existente', async ({ request, authToken }) => {
+
+            const cenario = dadosEspecificos.produto_existente
+
+            const response = await request.get(`products/${cenario.dados.id}`, {
+                headers: { Authorization: `Bearer ${authToken}` }
+            })
+
+            expect(response.status()).toBe(cenario.esperado.status)
+
+            const body = await response.json()
+
+            // mensagem de sucesso
+            expect(body.mensagens).toContain(cenario.esperado.mensagem)
+
+            // campos principais
+            expect(body.data).toHaveProperty('id')
+            expect(body.data).toHaveProperty('name')
+            expect(body.data).toHaveProperty('sku')
+            expect(body.data).toHaveProperty('price')
+            expect(body.data).toHaveProperty('stock_quantity')
+
+            // objetos aninhados
+            console.log('Categoria:', body.data.categories.name)
+            console.log('Fornecedor:', body.data.suppliers.company_name)
+
+            expect(body.data.categories.name.length).toBeGreaterThan(0)
+            expect(body.data.suppliers.company_name.length).toBeGreaterThan(0)
+
+            // tipos dos aninhados
+            expect(typeof body.data.categories.name).toBe('string')
+            expect(typeof body.data.suppliers.company_name).toBe('string')
+
+
+
+        });
+
     });
 
     test.describe('Atualização de Produtos ', () => {
@@ -396,4 +499,126 @@ test.describe('Gestão de Catálogo de Produtos', () => {
         test('Deve validar o formato e o tamanho máximo do arquivo de imagem', async ({ request, authToken }) => {
         });
     });
+
+    // test.describe('Ciclo completo de produto', () => {
+
+    //     let produtoId: number  
+
+    //     test('01 - Deve criar produto e salvar o ID', async ({ request, authToken }) => {
+    //         const cenario = dadosCadastro.valido
+
+    //         const response = await request.post('products', {
+    //             headers: { Authorization: `Bearer ${authToken}` },
+    //             data: cenario.dados
+    //         })
+
+    //         expect(response.status()).toBe(201)
+
+    //         const body = await response.json()
+    //         produtoId = body.data.id  // ← salva o ID
+
+    //         console.log('Produto criado com ID:', produtoId)
+    //         expect(produtoId).toBeDefined()
+    //         expect(typeof produtoId).toBe('number')
+    //     })
+
+    //     test('02 - Deve buscar produto criado por ID', async ({ request, authToken }) => {
+    //         const response = await request.get(`products/${produtoId}`, {
+    //             headers: { Authorization: `Bearer ${authToken}` }
+    //         })
+
+    //         expect(response.status()).toBe(200)
+
+    //         const body = await response.json()
+    //         expect(body.data.id).toBe(produtoId)
+    //         expect(body.data.name).toBeDefined()
+
+    //         console.log('Produto encontrado:', body.data.name)
+    //     })
+
+    //     test('03 - Deve deletar produto criado', async ({ request, authToken }) => {
+    //         const response = await request.delete(`products/${produtoId}`, {
+    //             headers: { Authorization: `Bearer ${authToken}` }
+    //         })
+
+    //         expect(response.status()).toBe(200)
+    //         console.log('Produto deletado:', produtoId)
+    //     })
+
+    //     test('04 - Deve confirmar que produto foi deletado', async ({ request, authToken }) => {
+    //         const response = await request.get(`products/${produtoId}`, {
+    //             headers: { Authorization: `Bearer ${authToken}` }
+    //         })
+
+    //         expect(response.status()).toBe(404)
+    //         console.log('Confirmado: produto não existe mais')
+    //     })
+
+    // })
+
+    test.describe('Ciclo completo de produto', () => {     
+
+        let produtoId: number
+
+    test('01 - Deve criar produto e salvar o ID', async ({ request, authToken }) => {
+        const cenario = dadosCadastro.valido
+
+        const response = await request.post('products', {
+            headers: { Authorization: `Bearer ${authToken}` },
+            data: cenario.dados
+        })
+
+        expect(response.status()).toBe(cenario.esperado.status)
+
+        const body = await response.json()
+        produtoId = body.data.id
+
+        expect(body.message).toContain(cenario.esperado.mensagem)
+        expect(produtoId).toBeDefined()
+        expect(typeof produtoId).toBe('number')
+    })
+
+    test('02 - Deve buscar produto criado por ID', async ({ request, authToken }) => {
+        const cenario = dadosEspecificos.produto_existente
+
+        const response = await request.get(`products/${produtoId}`, {
+            headers: { Authorization: `Bearer ${authToken}` }
+        })
+
+        expect(response.status()).toBe(cenario.esperado.status)
+
+        const body = await response.json()
+        expect(body.mensagens).toContain(cenario.esperado.mensagem)
+        expect(body.data.id).toBe(produtoId)
+    })
+
+    test('03 - Deve deletar produto criado', async ({ request, authToken }) => {
+        const cenario = dadosExclusao.valido
+
+        const response = await request.delete(`products/${produtoId}`, {
+            headers: { Authorization: `Bearer ${authToken}` }
+        })
+
+        expect(response.status()).toBe(cenario.esperado.status)
+
+        const body = await response.json()
+        expect(body.mensagens).toContain(cenario.esperado.mensagem)
+    })
+
+    test('04 - Deve confirmar que produto foi deletado', async ({ request, authToken }) => {
+        const cenario = dadosExclusao.produto_nao_encontrado
+
+        const response = await request.get(`products/${produtoId}`, {
+            headers: { Authorization: `Bearer ${authToken}` }
+        })
+
+        expect(response.status()).toBe(cenario.esperado.status)
+
+        const body = await response.json()
+        expect(body.mensagens).toContain(
+            `Produto com ID ${produtoId} não encontrado.`
+        )
+    })
+
+    })
 });

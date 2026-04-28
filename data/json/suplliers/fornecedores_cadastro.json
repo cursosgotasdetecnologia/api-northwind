@@ -1,0 +1,92 @@
+{
+    "valido": {
+        "tipo": "sucesso",
+        "dados": {
+            "company_name": "Teereewerrtech Solutionsd Ltda",
+            "contact_name": "Jewertãrero Silvad",
+            "email": "joerewewrtrrado@techsolutions.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": "12345656661234",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 201,
+            "mensagem": "Fornecedor criado com sucesso!"
+        }
+    },
+    "fornecedor_email_duplicado": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutionsd Ltda",
+            "contact_name": "João Silvad",
+            "email": "joado@techsolutions.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": "12345478901234",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 409,
+            "mensagem": "Já existe um fornecedor com este e-mail."
+        }
+    },
+    "fornecedor_cnpj_duplicado": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutionsd Ltda",
+            "contact_name": "João Silvad",
+            "email": "joarrdo@techsolutions.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": "12345478901234",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 409,
+            "mensagem": "Já existe um fornecedor com este CNPJ."
+        }
+    },
+    "fornecedor_contato_obrigatorio": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tecwh Solutionsd Ltda",
+            "contact_name": null,
+            "email": "joawdo@techsolutions.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": "12345498901234",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Nome do contato é obrigatório."
+        }
+    },
+    "fornecedor_email_obrigatorio": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutionsd Ltda",
+            "contact_name": "teste",
+            "email": null,
+            "phone": "(11) 98765-4321",
+            "cnpj": "12345478901234",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "E-mail do fornecedor é obrigatório."
+        }
+    },
+    "fornecedor_cnpj_obrigatorio": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutionsd Ltda",
+            "contact_name": "teste",
+            "email": "teste@gmail.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": null,
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "CNPJ do fornecedor é obrigatório."
+        }
+    }
+}

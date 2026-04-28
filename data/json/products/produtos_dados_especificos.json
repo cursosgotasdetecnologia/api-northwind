@@ -1,0 +1,22 @@
+{
+    "produto_existente": {
+        "tipo": "sucesso",
+        "dados": {
+            "id": 363
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Produto carregado com sucesso."
+        }
+    },
+    "produto_valido_em_lista": {
+        "tipo": "sucesso",
+        "dados": {
+            "id": 363
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Produto carregado com sucesso."
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import { test, expect } from '../../fixtures/auth.fixture';
+import dadosCadastro from '../../data/json/suplliers/fornecedores_cadastro.json';
 
 test.describe('Gestão de Fornecedores', () => {
 
@@ -95,21 +96,83 @@ test.describe('Gestão de Fornecedores', () => {
     test.describe('Criação de Fornecedor', () => {
 
         test('Deve criar fornecedor com sucesso e retornar ID único', async ({ request, authToken }) => {
+            const cenario = dadosCadastro.valido;
+            const response = await request.post('suppliers', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+            // campos obrigatórios presentes
+            expect(body.data).toHaveProperty('company_name')
+            expect(body.data).toHaveProperty('email')
+            expect(body.data).toHaveProperty('contact_name')
+            expect(body.data).toHaveProperty('state')
+
         });
 
-        test('Deve validar obrigatoriedade dos campos na criação', async ({ request, authToken }) => {
+        test('Deve validar obrigatoriedade do contato do fornecedor', async ({ request, authToken }) => {
+            const cenario = dadosCadastro.fornecedor_contato_obrigatorio;
+            const response = await request.post('suppliers', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+            // // campos obrigatórios presentes
+            // expect(body.data).toHaveProperty('company_name')
+            // expect(body.data).toHaveProperty('email')
+            // expect(body.data).toHaveProperty('contact_name')
+            // expect(body.data).toHaveProperty('state')
         });
 
-        test('Deve impedir criação com email ou nome de empresa duplicado', async ({ request, authToken }) => {
+        test('Deve validar obrigatoriedade do email do fornecedor', async ({ request, authToken }) => {
+            const cenario = dadosCadastro.fornecedor_email_obrigatorio;
+            const response = await request.post('suppliers', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
 
-        test('Deve validar formato de email inválido', async ({ request, authToken }) => {
+        test('Deve validar obrigatoriedade do CNPJ do fornecedor', async ({ request, authToken }) => {
+            const cenario = dadosCadastro.fornecedor_cnpj_obrigatorio;
+            const response = await request.post('suppliers', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
         });
 
-        test('Deve validar formato de telefone inválido', async ({ request, authToken }) => {
+        test('Deve impedir cadastro com CNPJ duplicado', async ({ request, authToken }) => {
+            const cenario = dadosCadastro.fornecedor_cnpj_duplicado;
+            const response = await request.post('suppliers', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
 
-        test('Deve exigir autenticação para criação de fornecedor', async ({ request }) => {
+        test('Deve exigir autenticação para criação de fornecedor', async ({ request,authToken }) => {
+            const cenario = dadosCadastro.fornecedor_cnpj_duplicado;
+            const response = await request.post('suppliers', {
+               // headers: { Authorization: `Bearer ${authToken}` },
+                data: cenario.dados
+            });
+            const body = await response.json();
+            expect(response.status()).toBe(401);
+            
         });
 
     });
