@@ -4,6 +4,7 @@ import dadosExclusao from '../../data/json/categories/categorias_exclusao.json';
 import dadosEspecificos from '../../data/json/categories/categorias_especificas.json';
 import dadosAtualizacao from '../../data/json/categories/categorias_atualizacao.json';
 import dadosListagem from '../../data/json/categories/categorias_listagem.json';
+import { validarStatusEMensagem } from '../../utils/assertion';
 
 test.describe('Gestão de Categorias', () => {
 
@@ -24,30 +25,18 @@ test.describe('Gestão de Categorias', () => {
             expect(response.status()).toBe(cenario.esperado.status);
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
-    });
-    /* Este teste não se aplica */
-    // test('Deve aplicar filtros de busca textual e ordenação corretamente', async ({ request, authToken }) => {
-    // });
 
+        test('Deve exigir token JWT válido para acesso à listagem', async ({ request, authToken }) => {
+            const cenario = dadosListagem.listagem_sem_token;
+            const response = await request.get('categories', {
+                //headers: { Authorization: `Bearer ${authToken}` },
+            });
 
-    test('Deve exigir token JWT válido para acesso à listagem', async ({ request, authToken }) => {
-        const cenario = dadosListagem.listagem_sem_token;
-        const response = await request.get('categories', {
-            headers: { Authorization: `Bearer ${authToken}` },
+            const body = await response.json();
+            validarStatusEMensagem(response, body, cenario.esperado);
         });
 
-        const body = await response.json();
-        expect(response.status()).toBe(cenario.esperado.status);
-        expect(body.mensagens).toContain(cenario.esperado.mensagem);
-
     });
-
-    /* Este teste não se aplica */
-    //test('Deve validar parâmetros de paginação como números positivos', async ({ request, authToken }) => {
-    //});
-    /* Este teste não se aplica */
-    //test('Deve garantir consistência da estrutura JSON de resposta', async ({ request, authToken }) => {
-    //});
 
     test.describe('Criação de Categoria', () => {
 
@@ -56,22 +45,34 @@ test.describe('Gestão de Categorias', () => {
         });
 
         test('Deve validar obrigatoriedade dos campos name e description', async ({ request, authToken }) => {
+
             const cenario = dadosCadastro.valido;
+
+            const timestamp = Date.now();
+
+            // só sobrescreve os campos que podem conflitar
+            const dados = {
+                ...cenario.dados,
+                name: `Categoria ${timestamp}`,
+                description: `Descricao ${timestamp}`
+            };
+
             const response = await request.post('categories', {
                 headers: { Authorization: `Bearer ${authToken}` },
-                data: cenario.dados
+                data: dados
             });
+
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+            validarStatusEMensagem(response, body, cenario.esperado);
 
             // campos obrigatórios presentes
-            expect(body.data).toHaveProperty('name')
-            expect(body.data).toHaveProperty('description')
+            expect(body.data).toHaveProperty('name');
+            expect(body.data).toHaveProperty('description');
 
             // tipos corretos          
-            expect(typeof body.data.name).toBe('string')
-            expect(typeof body.data.description).toBe('string')
+            expect(typeof body.data.name).toBe('string');
+            expect(typeof body.data.description).toBe('string');
 
         });
 
@@ -82,8 +83,7 @@ test.describe('Gestão de Categorias', () => {
                 data: cenario.dados
             });
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+            validarStatusEMensagem(response, body, cenario.esperado);
         });
 
         test('Deve validar limites de caracteres do nome acima de 100 caracteres', async ({ request, authToken }) => {
@@ -93,8 +93,7 @@ test.describe('Gestão de Categorias', () => {
                 data: cenario.dados
             });
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+            validarStatusEMensagem(response, body, cenario.esperado);
         });
         test('Deve validar limites de caracteres de descrição da categoria acima de 200 caracteres', async ({ request, authToken }) => {
             const cenario = dadosCadastro.categoria_descricao_limite_acima;
@@ -103,8 +102,7 @@ test.describe('Gestão de Categorias', () => {
                 data: cenario.dados
             });
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+            validarStatusEMensagem(response, body, cenario.esperado);
         });
     });
 
@@ -115,8 +113,7 @@ test.describe('Gestão de Categorias', () => {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+            validarStatusEMensagem(response, body, cenario.esperado);
         });
 
         test('Deve exigir autenticação para consulta por ID', async ({ request }) => {
@@ -124,9 +121,11 @@ test.describe('Gestão de Categorias', () => {
             const response = await request.get(`categories/${cenario.dados.id}`, {
                 //  headers: { Authorization: `Bearer ${authToken}` },
             });
+
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+            validarStatusEMensagem(response, body, cenario.esperado);
+
         });
 
         test('Deve listar categoria com dados de cadastro', async ({ request, authToken }) => {
@@ -135,8 +134,7 @@ test.describe('Gestão de Categorias', () => {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+            validarStatusEMensagem(response, body, cenario.esperado);
         });
 
     });
@@ -221,28 +219,63 @@ test.describe('Gestão de Categorias', () => {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+            validarStatusEMensagem(response, body, cenario.esperado);
         });
 
         test('Deve impedir excluir categoria com produto vinculado', async ({ request, authToken }) => {
             const cenario = dadosExclusao.categoria_com_produtos
+
             const response = await request.delete(`categories/${cenario.dados.id}`, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+            validarStatusEMensagem(response, body, cenario.esperado);
         });
 
-        test('Deve retornar mensagem de confirmação de remoção', async ({ request, authToken }) => {
-            const cenario = dadosExclusao.categoria_valida
-            const response = await request.delete(`categories/${cenario.dados.id}`, {
+        test('Deve criar e depois remover categoria validando o fluxo completo', async ({ request, authToken }) => {
+
+            // 1. cria categoria (dado dinâmico)
+            const timestamp = Date.now();
+
+            const novaCategoria = {
+                ...dadosCadastro.valido.dados,
+                name: `Categoria ${timestamp}`,
+                description: `Descricao ${timestamp}`
+            };
+
+            const createResponse = await request.post('categories', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: novaCategoria
+            });
+
+            const createBody = await createResponse.json();
+
+            expect(createResponse.status()).toBe(201);
+
+            // valida estrutura (reaproveita lógica da aula 61)
+            expect(createBody.data).toHaveProperty('id');
+            expect(createBody.data.name).toBe(novaCategoria.name);
+
+            const idCriado = createBody.data.id;
+
+            // 2. deleta a categoria criada
+            const deleteResponse = await request.delete(`categories/${idCriado}`, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
-            const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+            const deleteBody = await deleteResponse.json();
+
+            // 3. valida remoção
+            expect(deleteResponse.status()).toBe(200);
+            expect(deleteBody.mensagens).toBeDefined();
+
+            // 4. duplo check (garante que realmente deletou)
+            const getResponse = await request.get(`categories/${idCriado}`, {
+                headers: { Authorization: `Bearer ${authToken}` },
+            });
+
+            expect(getResponse.status()).toBe(404);
+
         });
 
         test('Deve exigir autenticação para remoção', async ({ request, authToken }) => {
@@ -251,8 +284,7 @@ test.describe('Gestão de Categorias', () => {
                 //  headers: { Authorization: `Bearer ${authToken}` },
             });
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+            validarStatusEMensagem(response, body, cenario.esperado);
         });
         test('Deve validar exclusão ao não informar um ID', async ({ request, authToken }) => {
             const cenario = dadosExclusao.categoria_null
@@ -260,8 +292,7 @@ test.describe('Gestão de Categorias', () => {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             const body = await response.json();
-            expect(response.status()).toBe(cenario.esperado.status);
-            expect(body.mensagens).toContain(cenario.esperado.mensagem);
+            validarStatusEMensagem(response, body, cenario.esperado);
         });
     });
 });

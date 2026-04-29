@@ -2,8 +2,8 @@
     "valido": {
         "tipo": "sucesso",
         "dados": {
-            "name": "Categoria 002",
-            "description": "Categoria 002 Automacao"
+            "name": "Categoria 0025",
+            "description": "Categoria 0052 Automacao"
         },
         "esperado": {
             "status": 201,
@@ -29,7 +29,7 @@
         },
         "esperado": {
             "status": 400,
-            "mensagem": "value too long for type character varying(100)"
+            "mensagem": "Nome da categoria deve ter no máximo 100 caracteres."
         }
     },
     "categoria_descricao_limite_acima": {
@@ -40,7 +40,7 @@
         },
         "esperado": {
             "status": 400,
-            "mensagem": "value too long for type character varying(100)"
+            "mensagem": "Descrição deve ter no máximo 200 caracteres."
         }
     },
     "categoria_inexistente": {

@@ -183,8 +183,10 @@ test.describe('Gestão de Fornecedores', () => {
             });
 
             const body = await duplicado.json();
-
             // 3. valida regra de negócio
+
+
+
             expect(duplicado.status()).toBe(409);
 
             // validação leve (sem acoplar demais)
@@ -195,7 +197,7 @@ test.describe('Gestão de Fornecedores', () => {
             //     headers: { Authorization: `Bearer ${authToken}` },
             //     data: cenario.dados
             // });
-           // const body = await response.json();
+            // const body = await response.json();
             // expect(response.status()).toBe(cenario.esperado.status);
             // expect(body.mensagens).toContain(cenario.esperado.mensagem);
 

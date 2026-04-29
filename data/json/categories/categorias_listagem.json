@@ -44,7 +44,7 @@
         },
         "esperado": {
             "status": 404,
-            "mensagem": "Categoria encontrada com sucesso."
+            "mensagem": "Categoria com ID 13987 não encontrada."
         }
     }
 }
