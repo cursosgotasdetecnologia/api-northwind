@@ -7,11 +7,33 @@ import dadosFiltros from '../../data/json/products/produtos_dados_filtros.json';
 import dadosMidia from '../../data/json/products/produtos_dados_midia.json';
 import { validarStatusEMensagem } from '../../utils/assertion';
 import { validarProdutoCriado } from '../../utils/assertion';
+import { criarProduto } from '../../services/product.service';
+import { validarProdutoPersistido } from '../../utils/assertion';
+import { validarContentTypeJson } from '../../utils/assertion';
+import { validarStatus } from '../../utils/assertion';
+import { listarProdutos } from '../../services/product.service';
+
 
 test.describe('Gestão de Catálogo de Produtos', () => {
 
     test.describe('Criação de Novos Produtos', () => {
         test('Deve cadastrar produto com retorno de dados registrados', async ({ request, authToken }) => {
+            const cenario = dadosCadastro.valido;
+            //  gera valor único (evita conflito de nome/sku)
+            const timestamp = Date.now();
+
+            const dados = {
+                ...cenario.dados,
+                name: `Produto ${timestamp}`,
+                sku: `SKU-${timestamp}`
+            };
+            const response = await criarProduto(request, authToken, dados);
+
+            const body = await response.json();
+            validarStatusEMensagem(response, body, cenario.esperado);
+            validarProdutoCriado(body);
+        });
+        test('Deve validar estrutura do produto criado', async ({ request, authToken }) => {
             const cenario = dadosCadastro.valido;
 
             //  gera valor único (evita conflito de nome/sku)
@@ -23,99 +45,47 @@ test.describe('Gestão de Catálogo de Produtos', () => {
                 sku: `SKU-${timestamp}`
             };
 
-            const response = await request.post('products', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                data: dados
-            });
+            const response = await criarProduto(request, authToken, dados);
 
             const body = await response.json();
             validarStatusEMensagem(response, body, cenario.esperado);
             validarProdutoCriado(body);
-        });
-
-
-
-
-        test('Deve validar estrutura do produto criado', async ({ request, authToken }) => {
-            const cenario = dadosCadastro.valido;
-            
-             //  gera valor único (evita conflito de nome/sku)
-            const timestamp = Date.now();
-
-            const dados = {
-                ...cenario.dados,
-                name: `Produto ${timestamp}`,
-                sku: `SKU-${timestamp}`
-            };
-
-
-            
-            const response = await request.post('products', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                data: dados
-            });
-            const body = await response.json();
-
-            validarStatusEMensagem(response, body, cenario.esperado);
-
-            validarProdutoCriado(body);
-
-            // valores batem com o que foi enviado
-            expect(body.data.name).toBe(dados.name)
-            expect(body.data.price).toBe(dados.price)
-            expect(body.data.sku).toBe(dados.sku)
-            expect(body.data.category_id).toBe(dados.category_id)
-            expect(body.data.supplier_id).toBe(dados.supplier_id)
+            validarProdutoPersistido(body, dados);
 
         });
         test('Deve validar erro de preço negativo', async ({ request, authToken }) => {
             const cenario = dadosCadastro.preco_negativo;
 
-            console.log(cenario.dados)
+            const response = await criarProduto(request, authToken, cenario.dados);
 
-            const response = await request.post('products', {
-                headers: {
-                    Authorization: `Bearer ${authToken}`
-                },
-                data: cenario.dados
-            });
             const body = await response.json();
-
             validarStatusEMensagem(response, body, cenario.esperado);
         });
         test('Deve validar produto já cadastrado', async ({ request, authToken }) => {
             const cenario = dadosCadastro.produto_duplicado;
 
-            const response = await request.post('products', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                data: cenario.dados
-            });
+            const response = await criarProduto(request, authToken, cenario.dados);
+
             const body = await response.json();
             validarStatusEMensagem(response, body, cenario.esperado);
         });
         test('Deve validar produto null no cadastro', async ({ request, authToken }) => {
             const cenario = dadosCadastro.produto_null;
 
-            const response = await request.post('products', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                data: cenario.dados
-            });
+            const response = await criarProduto(request, authToken, cenario.dados);
+
             const body = await response.json();
             validarStatusEMensagem(response, body, cenario.esperado);
 
-            const headers = response.headers()
-            expect(headers['content-type']).toContain('application/json')
-            expect(headers['content-type']).toBeDefined()
+            validarContentTypeJson(response)
 
 
         });
         test('Deve impedir produto com sku duplicado', async ({ request, authToken }) => {
             const cenario = dadosCadastro.sku_duplicado;
 
-            const response = await request.post('products', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                data: cenario.dados
-            });
+            const response = await criarProduto(request, authToken, cenario.dados);
+
             const body = await response.json();
             validarStatusEMensagem(response, body, cenario.esperado);
         });
@@ -155,41 +125,35 @@ test.describe('Gestão de Catálogo de Produtos', () => {
     test.describe('Consulta e Busca de Produtos ', () => {
         test('Deve permitir a listagem de produtos com paginação simples', async ({ request, authToken }) => {
 
-            const response = await request.get('products?page=1&limit=10', {
-                headers: { Authorization: `Bearer ${authToken}` }
+            const response = await listarProdutos(request, authToken, {
+                page: 1,
+                limit: 10
             });
-            expect(response.status()).toBe(200);
 
+            validarStatus(response, 200)
         })
+
         test('Deve filtrar produtos por múltiplos critérios simultaneamente', async ({ request, authToken }) => {
 
-            const response = await request.get('products', {
-                headers: {
-                    Authorization: `Bearer ${authToken}`
-                },
-                params: {
-                    page: 1,
-                    limit: 3,
-                    search: 'mochila',
-                    category_id: 2,
-                    supplier_id: 7
-                }
+            const response = await listarProdutos(request, authToken, {
+                page: 1,
+                limit: 3,
+                search: 'mochila',
+                category_id: 2,
+                supplier_id: 7
             });
-            expect(response.status()).toBe(200);
+            validarStatus(response, 200)
 
             const body = await response.json();
-            console.log('Produtos retornados', body.data);
+            console.log('Produtos retornados', response.body);
         });
         test('Deve exibir as informações de categorias e fornecedores vinculados aos produtos', async ({ request, authToken }) => {
 
-            const response = await request.get('products', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                params: {
-                    category_id: 2,
-                    supplier_id: 7
-                }
+            const response = await listarProdutos(request, authToken, {
+                category_id: 2,
+                supplier_id: 7
             });
-            expect(response.status()).toBe(200);
+            validarStatus(response, 200)
 
             const body = await response.json();
             console.log('Produtos retornados', body.data);

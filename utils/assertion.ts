@@ -28,3 +28,24 @@ export function validarProdutoCriado(body: any) {
     expect(body.data.stock_quantity).toBeGreaterThanOrEqual(0);
     expect(body.data.name.length).toBeGreaterThan(0);
 }
+
+export function validarProdutoPersistido(body: any, dadosEnviados: any) {
+
+    expect(body.data.name).toBe(dadosEnviados.name);
+    expect(body.data.price).toBe(dadosEnviados.price);
+    expect(body.data.sku).toBe(dadosEnviados.sku);
+    expect(body.data.category_id).toBe(dadosEnviados.category_id);
+    expect(body.data.supplier_id).toBe(dadosEnviados.supplier_id);
+
+}
+
+export function validarContentTypeJson(response: APIResponse) {
+    const headers = response.headers();
+
+    expect(headers['content-type']).toBeDefined();
+    expect(headers['content-type']).toContain('application/json');
+}
+
+export function validarStatus(response: APIResponse, status: number) {
+    expect(response.status()).toBe(status);
+}
