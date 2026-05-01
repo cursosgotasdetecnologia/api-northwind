@@ -5,13 +5,16 @@ import dadosEspecificos from '../../data/json/products/produtos_dados_especifico
 import daosAtualizacao from '../../data/json/products/produtos_dados_atualizacao.json';
 import dadosFiltros from '../../data/json/products/produtos_dados_filtros.json';
 import dadosMidia from '../../data/json/products/produtos_dados_midia.json';
-import { validarStatusEMensagem } from '../../utils/assertion';
-import { validarProdutoCriado } from '../../utils/assertion';
-import { criarProduto } from '../../services/product.service';
-import { validarProdutoPersistido } from '../../utils/assertion';
-import { validarContentTypeJson } from '../../utils/assertion';
-import { validarStatus } from '../../utils/assertion';
+
+import { validarStatusEMensagem } from '../../utils/commons.assertion';
+import { validarStatus } from '../../utils/commons.assertion';
+import { validarContentTypeJson } from '../../utils/commons.assertion';
+
+import { validarProdutoCriado } from '../../utils/product.assertion';
+import { validarProdutoPersistido } from '../../utils/product.assertion';
+
 import { listarProdutos } from '../../services/product.service';
+import { criarProduto } from '../../services/product.service';
 
 
 test.describe('Gestão de Catálogo de Produtos', () => {

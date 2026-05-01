@@ -2,11 +2,11 @@
     "valido": {
         "tipo": "sucesso",
         "dados": {
-            "company_name": "Teereewerrtech Solutionsd Ltda",
+            "company_name": "Teere5ewerrtech Solutionsd Ltda",
             "contact_name": "Jewertãrero Silvad",
-            "email": "joerewewrtrrado@techsolutions.com",
+            "email": "joerewe5wrtrrado@techsolutions.com",
             "phone": "(11) 98765-4321",
-            "cnpj": "12345656661234",
+            "cnpj": "12345656961234",
             "uf": "SP"
         },
         "esperado": {
@@ -87,6 +87,66 @@
         "esperado": {
             "status": 400,
             "mensagem": "CNPJ do fornecedor é obrigatório."
+        }
+    },
+    "fornecedor_email_invalido": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutions Ltda",
+            "contact_name": "Carlos Silva",
+            "email": "email-invalido",
+            "phone": "(11) 98765-4321",
+            "cnpj": "98765432100199",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "E-mail inválido."
+        }
+    },
+    "fornecedor_cnpj_invalido": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutions Ltda",
+            "contact_name": "Carlos Silva",
+            "email": "carlos@tech.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": "123",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "CNPJ inválido."
+        }
+    },
+    "fornecedor_uf_invalida": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutions Ltda",
+            "contact_name": "Carlos Silva",
+            "email": "carlos@tech.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": "98765432100199",
+            "uf": "XX"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "UF inválida."
+        }
+    },
+    "fornecedor_nome_empresa_vazio": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "",
+            "contact_name": "Carlos Silva",
+            "email": "carlos@tech.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": "98765432100199",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Nome da empresa é obrigatório."
         }
     }
 }

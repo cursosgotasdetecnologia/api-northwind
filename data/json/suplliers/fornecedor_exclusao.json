@@ -1,0 +1,52 @@
+{
+    "fornecedor_existente": {
+        "tipo": "sucesso",
+        "dados": {
+            "id": 22
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Fornecedor excluído com sucesso!"
+        }
+    },
+    "fornecedor_null": {
+        "tipo": "erro",
+        "dados": {
+            "id": null
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "ID da categoria inválido. Deve ser um número positivo."
+        }
+    },
+    "fornecedor_inexistente": {
+        "tipo": "erro",
+        "dados": {
+            "id": 1365
+        },
+        "esperado": {
+            "status": 404,
+            "mensagem": "Categoria com ID 1365 não encontrada."
+        }
+    },
+    "fornecedor_com_produtos": {
+        "tipo": "erro",
+        "dados": {
+            "id": 13
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Não é possível excluir. Esta categoria está sendo usada por produtos."
+        }
+    },
+    "fornecedor_excluir_sem_token": {
+        "tipo": "erro",
+        "dados": {
+            "id": 13
+        },
+        "esperado": {
+            "status": 401,
+            "mensagem": "Token ausente"
+        }
+    }
+}

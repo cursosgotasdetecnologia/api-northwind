@@ -1,15 +1,5 @@
 import { expect, APIResponse } from '@playwright/test';
 
-export function validarStatusEMensagem(
-    response: APIResponse,
-    body: any,
-    esperado: any
-) {
-    expect(response.status()).toBe(esperado.status);
-    expect(body.mensagens).toContain(esperado.mensagem);
-}
-
-
 export function validarProdutoCriado(body: any) {
 
     // 🔹 estrutura
@@ -37,15 +27,4 @@ export function validarProdutoPersistido(body: any, dadosEnviados: any) {
     expect(body.data.category_id).toBe(dadosEnviados.category_id);
     expect(body.data.supplier_id).toBe(dadosEnviados.supplier_id);
 
-}
-
-export function validarContentTypeJson(response: APIResponse) {
-    const headers = response.headers();
-
-    expect(headers['content-type']).toBeDefined();
-    expect(headers['content-type']).toContain('application/json');
-}
-
-export function validarStatus(response: APIResponse, status: number) {
-    expect(response.status()).toBe(status);
 }

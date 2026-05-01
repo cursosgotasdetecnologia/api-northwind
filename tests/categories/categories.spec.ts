@@ -4,7 +4,8 @@ import dadosExclusao from '../../data/json/categories/categorias_exclusao.json';
 import dadosEspecificos from '../../data/json/categories/categorias_especificas.json';
 import dadosAtualizacao from '../../data/json/categories/categorias_atualizacao.json';
 import dadosListagem from '../../data/json/categories/categorias_listagem.json';
-import { validarStatusEMensagem } from '../../utils/assertion';
+
+import { validarStatusEMensagem } from '../../utils/commons.assertion';
 
 test.describe('Gestão de Categorias', () => {
 
@@ -35,6 +36,15 @@ test.describe('Gestão de Categorias', () => {
             const body = await response.json();
             validarStatusEMensagem(response, body, cenario.esperado);
         });
+        test('impedir validação de  categoria por id sem autenticação', async ({ request }) => {
+            const response = await request.get('categories/3')
+            expect(response.status()).toBe(401);
+            console.log('Status Code:', response.status());
+
+        });
+       
+
+        
 
     });
 

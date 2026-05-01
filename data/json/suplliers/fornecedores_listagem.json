@@ -1,0 +1,59 @@
+{
+    "listagem_geral": {
+        "tipo": "erro",
+        "esperado": {
+            "status": 200,
+            "mensagem": "Fornecedores carregados com sucesso!"
+        }
+    },
+    "listagem_sem_token": {
+        "tipo": "erro",
+        "dados": {
+            "id": 13
+        },
+        "esperado": {
+            "status": 401,
+            "mensagem": "Token ausente"
+        }
+    },
+    "fornecedor_especifico": {
+        "tipo": "erro",
+        "dados": {
+            "id": 13
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "Fornecedor encontrado com sucesso."
+        }
+    },
+    "fornecedor_inexistente": {
+        "tipo": "erro",
+        "dados": {
+            "id": 124
+        },
+        "esperado": {
+            "status": 404,
+            "mensagem": "Fornecedor com ID 124 não encontrado."
+        }
+    },
+    "fornecedor_excluido": {
+        "tipo": "erro",
+        "dados": {
+            "id": 124
+        },
+        "esperado": {
+            "status": 404,
+            "mensagem": "Fornecedor excluído com sucesso!"
+        }
+    },
+    "produtos_de_fornecedor_existente": {
+        "tipo": "erro",
+        "dados": {
+            "id": 124
+        },
+        "esperado": {
+            "status": 200,
+            "mensagem": "9 produtos encontrados para o fornecedor Livros & Cia."
+        }
+    }
+}
