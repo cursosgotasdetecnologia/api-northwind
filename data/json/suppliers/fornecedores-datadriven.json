@@ -1,0 +1,122 @@
+[
+    {
+        "company_name": "Distribuidoras Nova Era Ltda",
+        "contact_name": "Carlos Henrique Souza",
+        "email": "contatos.novaera01@empresa.com",
+        "phone": "(11) 91234-0001",
+        "cnpj": "12345677090101",
+        "uf": "SP"
+    },
+    {
+        "company_name": "Alimentsos Bom Sabor SA",
+        "contact_name": "Mariana Alves Pereira",
+        "email": "mariasna.bomsabor02@empresa.com",
+        "phone": "(21) 92345-0002",
+        "cnpj": "12345678009102",
+        "uf": "RJ"
+    },
+    {
+        "company_name": "Techs Solutions Brasil Ltda",
+        "contact_name": "Lucas Ferreira Costa",
+        "email": "lucass.tech03@empresa.com",
+        "phone": "(31) 93456-0003",
+        "cnpj": "12345678009103",
+        "uf": "MG"
+    },
+    {
+        "company_name": "ConsstruMax Engenharia Ltda",
+        "contact_name": "Fernanda Ribeiro Gomes",
+        "email": "fernandsa.construmax04@empresa.com",
+        "phone": "(41) 94567-0004",
+        "cnpj": "12345678900104",
+        "uf": "PR"
+    },
+    {
+        "company_name": "AgrosVida Produtos Naturais",
+        "contact_name": "Ricardo Martins Oliveira",
+        "email": "ricardos.agrovida05@empresa.com",
+        "phone": "(51) 95678-0005",
+        "cnpj": "12345678090105",
+        "uf": "RS"
+    },
+    {
+        "company_name": "Logísstica Rápida Express",
+        "contact_name": "Patrícia Nunes Carvalho",
+        "email": "patricisa.logistica06@empresa.com",
+        "phone": "(61) 96789-0006",
+        "cnpj": "12345678090106",
+        "uf": "DF"
+    },
+    {
+        "company_name": "Disstribuidora Central Oeste",
+        "contact_name": "Eduardo Teixeira Santos",
+        "email": "eduardos.central07@empresa.com",
+        "phone": "(62) 97890-0007",
+        "cnpj": "12345678090107",
+        "uf": "GO"
+    },
+    {
+        "company_name": "Norsdeste Bebidas Ltda",
+        "contact_name": "Juliana Batista Lima",
+        "email": "julianas.bebidas08@empresa.com",
+        "phone": "(71) 98901-0008",
+        "cnpj": "12345678090108",
+        "uf": "BA"
+    },
+    {
+        "company_name": "Papselaria Criativa Ltda",
+        "contact_name": "Rafael Barbosa Rocha",
+        "email": "rafaesl.papelaria09@empresa.com",
+        "phone": "(81) 99012-0009",
+        "cnpj": "12345679000109",
+        "uf": "PE"
+    },
+    {
+        "company_name": "Fsarmácia Vida Plena",
+        "contact_name": "Aline Monteiro Dias",
+        "email": "alinse.farmacia10@empresa.com",
+        "phone": "(85) 90123-0010",
+        "cnpj": "12345698000110",
+        "uf": "CE"
+    },
+    {
+        "company_name": "Autos Peças Motor Forte",
+        "contact_name": "Bruno Cardoso Vieira",
+        "email": "brunso.autpecas11@empresa.com",
+        "phone": "(27) 91234-0011",
+        "cnpj": "12345679000111",
+        "uf": "ES"
+    },
+    {
+        "company_name": "Moveiss Planejados Ideal",
+        "contact_name": "Camila Freitas Lopes",
+        "email": "camilsa.moveis12@empresa.com",
+        "phone": "(48) 92345-0012",
+        "cnpj": "12345679000112",
+        "uf": "SC"
+    },
+    {
+        "company_name": "Ismportadora Global Trade",
+        "contact_name": "Diego Pires Fernandes",
+        "email": "diegso.global13@empresa.com",
+        "phone": "(65) 93456-0013",
+        "cnpj": "12345698000113",
+        "uf": "MT"
+    },
+    {
+        "company_name": "Ssegurança Total Serviços",
+        "contact_name": "Vanessa Duarte Melo",
+        "email": "vanessas.segurança14@empresa.com",
+        "phone": "(92) 94567-0014",
+        "cnpj": "12345678090114",
+        "uf": "AM"
+    },
+    {
+        "company_name": "Disstribuidora Sul Comercial",
+        "contact_name": "Thiago Moreira Campos",
+        "email": "thiagos.sul15@empresa.com",
+        "phone": "(54) 95678-0015",
+        "cnpj": "12345678900115",
+        "uf": "RS"
+    }
+]

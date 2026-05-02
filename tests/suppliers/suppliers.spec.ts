@@ -1,8 +1,8 @@
 import { test, expect } from '../../fixtures/auth.fixture';
-import dadosCadastro from '../../data/json/suplliers/fornecedores_cadastro.json';
-import dadosExclusao from '../../data/json/suplliers/fornecedor_exclusao.json';
-import dadosEspecificos from '../../data/json/suplliers/fornecedores_listagem.json';
-import massa from '../../data/json/suplliers/fornecedores_cadastro.json';
+import dadosCadastro from '../../data/json/suppliers/fornecedores_cadastro.json';
+import dadosExclusao from '../../data/json/suppliers/fornecedor_exclusao.json';
+import dadosEspecificos from '../../data/json/suppliers/fornecedores_listagem.json';
+import massa from '../../data/json/suppliers/fornecedores_cadastro.json';
 
 import { criarSupplier } from '../../services/supplier.service';
 import { validarStatusEMensagem } from '../../utils/commons.assertion';
@@ -12,6 +12,8 @@ import { validarFornecedorCriado } from '../../utils/supplier.assertions';
 
 import { buscarSupplierPorId } from '../../services/supplier.service';
 import { deletarSupplier } from '../../services/supplier.service';
+
+import { fakerPT_BR as faker } from '@faker-js/faker'
 
 test.describe('Gestão de Fornecedores', () => {
 
@@ -127,6 +129,57 @@ test.describe('Gestão de Fornecedores', () => {
             validarFornecedorCriado(body)
         });
 
+
+        test('Deve criar fornecedor com sucesso apartir do FAKER - 1 elemento', async ({ request, authToken }) => {
+            const cenario = dadosCadastro.valido;
+
+            const dados = {
+                ...cenario.dados,
+                company_name: faker.company.name(),
+                contact_name: faker.person.fullName(),
+                email: faker.internet.email(),
+                //phone: faker.phone.number('###########'),
+                cnpj: faker.string.numeric(14),
+                uf: faker.location.state({ abbreviated: true })
+
+            };
+
+            const response = await criarSupplier(request, authToken, dados)
+
+            console.log(dados);
+
+            const body = await response.json();
+            validarStatusEMensagem(response, body, cenario.esperado);
+            validarFornecedorCriado(body)
+
+        });
+
+        test('Deve criar fornecedor com sucesso apartir do FAKER - 10 elementos', async ({ request, authToken }) => {
+            const cenario = dadosCadastro.valido;
+            const timestamp = Date.now();
+
+            for (let i = 1; i <= 20; i++) {
+
+                const dados = {
+                    ...cenario.dados,
+                    company_name: `${faker.company.name()}_${timestamp}`,
+                    contact_name: faker.person.fullName(),
+                    email: `${faker.internet.email()}_${timestamp}`,
+                    cnpj: `${faker.string.numeric(10)}${timestamp.toString().slice(-4)}`, // 10 + 4 = 14 dígitos
+                    uf: faker.location.state({ abbreviated: true})
+                };
+
+                const response = await criarSupplier(request, authToken, dados)
+
+                console.log(dados);
+
+                const body = await response.json();
+                validarStatusEMensagem(response, body, cenario.esperado);
+                validarFornecedorCriado(body)
+            }
+
+        });
+
         test('Deve validar obrigatoriedade do contato do fornecedor', async ({ request, authToken }) => {
             const response = await criarSupplier(
                 request,
@@ -142,6 +195,7 @@ test.describe('Gestão de Fornecedores', () => {
                 massa.fornecedor_contato_obrigatorio.esperado
             );
         });
+
     });
 
     test('Deve validar obrigatoriedade do email do fornecedor', async ({ request, authToken }) => {
