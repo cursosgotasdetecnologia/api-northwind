@@ -10,11 +10,13 @@ import { validarStatusEMensagem } from '../../utils/commons.assertion';
 import { validarCategoriaCriada, validarCategoriaPersistida } from '../../utils/categorie.assertion';
 import { criarCategoria, atualizarCategoriaCompleta, deletarCategoria } from '../../services/categories.service';
 
+
+
 test.describe('Gestão de Categorias', () => {
 
     test.describe('Listagem de Categorias', () => {
 
-        test('Deve listar todas as categorias com mensagem esperada', async ({ request, authToken }) => {
+        test('Deve listar todas as categorias com mensagem esperada', async ({ request, authToken }, testInfo) => {
             const cenario = dadosListagem.listagem_geral;
             /* Como o GET não envia um corpo (data), a estrutura do seu JSON precisa se adaptar para o que ele realmente usa: os Parâmetros de URL ou (params)
              ou simplesmente a Validação do que volta.        
@@ -28,6 +30,16 @@ test.describe('Gestão de Categorias', () => {
             const body = await response.json();
             expect(response.status()).toBe(cenario.esperado.status);
             expect(body.mensagens).toContain(cenario.esperado.mensagem);
+
+            // 🎯 Só anexa se o teste falhar
+            // if (response.status() !== 201) {
+            //     await testInfo.attach('❌ Response de Erro', {
+            //         body: JSON.stringify({ sent: cenario, received: body, status: response.status() }, null, 2),
+            //         contentType: 'application/json'
+            //     });
+            // }
+
+
         });
 
         test('Deve exigir token JWT válido para acesso à listagem', async ({ request, authToken }) => {
@@ -45,10 +57,6 @@ test.describe('Gestão de Categorias', () => {
             console.log('Status Code:', response.status());
 
         });
-
-
-
-
     });
 
     test.describe('Criação de Categoria', () => {
@@ -57,7 +65,7 @@ test.describe('Gestão de Categorias', () => {
 
         });
 
-        test('Deve validar obrigatoriedade dos campos name e description', async ({ request, authToken }) => {
+        test('Deve validar obrigatoriedade dos campos name e description', async ({ request, authToken }, testInfo) => {
 
             const cenario = dadosCadastro.valido;
 
@@ -75,6 +83,8 @@ test.describe('Gestão de Categorias', () => {
                 data: dados
             });
 
+
+
             const body = await response.json();
 
             validarStatusEMensagem(response, body, cenario.esperado);
@@ -87,9 +97,22 @@ test.describe('Gestão de Categorias', () => {
             expect(typeof body.data.name).toBe('string');
             expect(typeof body.data.description).toBe('string');
 
+            // ✅ Um único attach com tudo que precisa
+            await testInfo.attach('API Call', {
+                body: JSON.stringify({
+                    endpoint: 'POST /suppliers',
+                    request: dados,
+                    response: body,
+                    status: response.status(),
+                    time: new Date().toISOString()
+                }, null, 2),
+                contentType: 'application/json'
+            });
+
+
         });
 
-        test('Deve impedir criação de categoria com nome duplicado', async ({ request, authToken }) => {
+        test('Deve impedir criação de categoria com nome duplicado', async ({ request, authToken }, testInfo) => {
             const cenario = dadosCadastro.categoria_duplicada;
             const response = await request.post('categories', {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -97,9 +120,14 @@ test.describe('Gestão de Categorias', () => {
             });
             const body = await response.json();
             validarStatusEMensagem(response, body, cenario.esperado);
+            await testInfo.attach('Response', {
+                body: JSON.stringify(body, null, 2),
+                contentType: 'application/json'
+            });
+
         });
 
-        test('Deve validar limites de caracteres do nome acima de 100 caracteres', async ({ request, authToken }) => {
+        test('Deve validar limites de caracteres do nome acima de 100 caracteres', async ({ request, authToken }, testInfo) => {
             const cenario = dadosCadastro.categoria_nome_limite_acima;
             const response = await request.post('categories', {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -107,8 +135,29 @@ test.describe('Gestão de Categorias', () => {
             });
             const body = await response.json();
             validarStatusEMensagem(response, body, cenario.esperado);
+
+            // await testInfo.attach('Response', {
+            //     body: JSON.stringify(body, null, 2),
+            //     contentType: 'application/json'
+            // });
+            // ✅ Um único attach com tudo que precisa
+
+            await testInfo.attach('API Call', {
+                body: JSON.stringify({
+                    endpoint: 'POST /suppliers',
+                    request: cenario.dados,
+                    response: body,
+                    status: response.status(),
+                    time: new Date().toISOString()
+                }, null, 2),
+                contentType: 'application/json'
+            });
+
+
+
+
         });
-        test('Deve validar limites de caracteres de descrição da categoria acima de 200 caracteres', async ({ request, authToken }) => {
+        test('Deve validar limites de caracteres de descrição da categoria acima de 200 caracteres', async ({ request, authToken }, testInfo) => {
             const cenario = dadosCadastro.categoria_descricao_limite_acima;
             const response = await request.post('categories', {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -116,6 +165,11 @@ test.describe('Gestão de Categorias', () => {
             });
             const body = await response.json();
             validarStatusEMensagem(response, body, cenario.esperado);
+            await testInfo.attach('Response', {
+                body: JSON.stringify(body, null, 2),
+                contentType: 'application/json'
+            });
+
         });
     });
 

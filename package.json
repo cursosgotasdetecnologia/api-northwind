@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test",
+    "report:generate": "npx allure generate ./allure-results --clean",
+    "report:open": "npx allure open",
+    "report": "npm run report:generate && npm run report:open"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cursosgotasdetecnologia/api-northwind.git"
@@ -19,7 +24,10 @@
   "devDependencies": {
     "@faker-js/faker": "^10.4.0",
     "@playwright/test": "^1.59.1",
-    "@types/node": "^25.5.2"
+    "@types/node": "^25.5.2",
+    "allure-commandline": "^2.38.1",
+    "allure-js-commons": "^3.7.1",
+    "allure-playwright": "^3.7.1"
   },
   "dependencies": {
     "dotenv": "^17.4.2"

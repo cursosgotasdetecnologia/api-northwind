@@ -1,4 +1,4 @@
-import {test as base} from  "@playwright/test";
+import { test as base, APIRequestContext, APIResponse } from "@playwright/test";
 import dotenv from 'dotenv'
 
 dotenv.config();
@@ -10,7 +10,7 @@ type Fixtures = {
 export const test = base.extend<Fixtures>({
     authToken: async ({ request }: any, use) => {
 
-         const login = await request.post('auth/login', {
+        const login = await request.post('auth/login', {
             data: {
                 email: process.env.EMAIL!,
                 password: process.env.PASSWORD!
@@ -20,8 +20,9 @@ export const test = base.extend<Fixtures>({
         const token = body.data.token;
 
         await use(token);
-       
-    }
+
+    }    
+
 });
 
 export const expect = test.expect;

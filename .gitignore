@@ -13,3 +13,7 @@ node_modules/
 
 # LAB
 /LABORATORIO
+
+allure-results/
+allure-report/
+

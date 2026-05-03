@@ -15,6 +15,7 @@ import { validarProdutoPersistido } from '../../utils/product.assertion';
 
 import { listarProdutos } from '../../services/product.service';
 import { criarProduto } from '../../services/product.service';
+import { allure } from 'allure-playwright';
 
 
 test.describe('Gestão de Catálogo de Produtos', () => {
@@ -512,11 +513,12 @@ test.describe('Gestão de Catálogo de Produtos', () => {
 
     // })
 
-    test.describe.skip('Ciclo completo de produto', () => {
+    test.describe('Ciclo completo de produto', () => {
 
         let produtoId: number
 
         test('01 - Deve criar produto e salvar o ID', async ({ request, authToken }) => {
+            await allure.severity('minor');
             const cenario = dadosCadastro.valido
 
             const response = await request.post('products', {
@@ -535,6 +537,8 @@ test.describe('Gestão de Catálogo de Produtos', () => {
         })
 
         test('02 - Deve buscar produto criado por ID', async ({ request, authToken }) => {
+             await allure.severity('trivial');
+
             const cenario = dadosEspecificos.produto_existente
 
             const response = await request.get(`products/${produtoId}`, {
@@ -549,6 +553,8 @@ test.describe('Gestão de Catálogo de Produtos', () => {
         })
 
         test('03 - Deve deletar produto criado', async ({ request, authToken }) => {
+             await allure.severity('minor');
+
             const cenario = dadosExclusao.valido
 
             const response = await request.delete(`products/${produtoId}`, {
@@ -562,6 +568,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
         })
 
         test('04 - Deve confirmar que produto foi deletado', async ({ request, authToken }) => {
+            await allure.severity('minor');
             const cenario = dadosExclusao.produto_nao_encontrado
 
             const response = await request.get(`products/${produtoId}`, {

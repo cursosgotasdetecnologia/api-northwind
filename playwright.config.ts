@@ -9,11 +9,13 @@ export default defineConfig({
   //reporter: 'html',
   reporter: [
     ['list'],
-    ['allure-playwright']
+    ['allure-playwright', {
+      detail: true,
+    }]
     /*['html', {   open: 'never'   }]*/
   ],
   use: {
-    baseURL: 'https://northwind-test-platform.vercel.app/api/v1/', 
+    baseURL: 'https://northwind-test-platform.vercel.app/api/v1/',
     extraHTTPHeaders: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

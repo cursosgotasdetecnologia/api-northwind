@@ -1,5 +1,9 @@
 import { APIRequestContext } from '@playwright/test';
 
+
+
+
+
 // 🔹 GET /categories
 export async function listarCategorias(
     request: APIRequestContext,
@@ -39,6 +43,9 @@ export async function criarCategoria(
         },
         data
     });
+
+   
+
 }
 
 // 🔹 PUT /categories/{id}

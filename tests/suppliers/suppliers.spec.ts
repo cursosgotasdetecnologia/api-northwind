@@ -11,6 +11,7 @@ import { validarFornecedorCriado } from '../../utils/supplier.assertions';
 import { buscarSupplierPorId } from '../../services/supplier.service';
 import { deletarSupplier } from '../../services/supplier.service';
 import * as fs from 'fs'
+import { allure } from 'allure-playwright';
 
 
 
@@ -110,7 +111,11 @@ test.describe('Gestão de Fornecedores', () => {
 
     test.describe('Criação de Fornecedor', () => {
 
-        test('Deve criar fornecedor com sucesso e retornar ID único', async ({ request, authToken }) => {
+        test('@Critical - Deve criar fornecedor com sucesso e retornar ID único', async ({ request, authToken }, testInfo) => {
+
+
+            await allure.severity('critical');
+
             const cenario = dadosCadastro.valido;
 
 
@@ -128,10 +133,16 @@ test.describe('Gestão de Fornecedores', () => {
             const body = await response.json();
             validarStatusEMensagem(response, body, cenario.esperado);
             validarFornecedorCriado(body)
+
+
+
         });
 
 
-        test.skip('Deve criar fornecedor com sucesso apartir do FAKER - 1 elemento', async ({ request, authToken }) => {
+        test('Deve criar fornecedor com sucesso apartir do FAKER - 1 elemento', async ({ request, authToken }) => {
+
+            await allure.severity('minor');
+
             const cenario = dadosCadastro.valido;
 
             const dados = {
@@ -155,7 +166,7 @@ test.describe('Gestão de Fornecedores', () => {
 
         });
 
-        test.skip('Deve criar fornecedor com sucesso apartir do FAKER - 10 elementos', async ({ request, authToken }) => {
+        test('Deve criar fornecedor com sucesso apartir do FAKER - 10 elementos', async ({ request, authToken }) => {
             const cenario = dadosCadastro.valido;
             const timestamp = Date.now();
 
@@ -207,7 +218,10 @@ test.describe('Gestão de Fornecedores', () => {
         });
 
 
-        test('Deve validar obrigatoriedade do contato do fornecedor', async ({ request, authToken }) => {
+        test('@Blocker - Deve validar obrigatoriedade do contato do fornecedor', async ({ request, authToken }) => {
+
+            await allure.severity('blocker');
+
             const response = await criarSupplier(
                 request,
                 authToken,
@@ -224,6 +238,8 @@ test.describe('Gestão de Fornecedores', () => {
         });
 
         test('Deve validar obrigatoriedade do email do fornecedor', async ({ request, authToken }) => {
+            await allure.severity('blocker');
+
             const cenario = dadosCadastro.fornecedor_email_obrigatorio;
             const response = await request.post('suppliers', {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -234,6 +250,8 @@ test.describe('Gestão de Fornecedores', () => {
         });
 
         test('Deve validar obrigatoriedade do CNPJ do fornecedor', async ({ request, authToken }) => {
+            await allure.severity('blocker');
+
             const response = await criarSupplier(
                 request,
                 authToken,
@@ -303,6 +321,8 @@ test.describe('Gestão de Fornecedores', () => {
 
         test('Deve retornar fornecedor específico com dados completos', async ({ request, authToken }) => {
 
+             await allure.severity('blocker');
+
             const timestamp = Date.now();
 
             const dados = {
@@ -326,7 +346,7 @@ test.describe('Gestão de Fornecedores', () => {
             const response = await buscarSupplierPorId(request, authToken, supplierId);
             const body = await response.json();
 
-            expect(response.status()).toBe(200);
+            expect(response.status()).toBe(400);
 
             // 🔹 estrutura
             expect(body.data).toHaveProperty('id');
@@ -366,18 +386,26 @@ test.describe('Gestão de Fornecedores', () => {
     test.describe('Produtos do Fornecedor', () => {
 
         test('Deve listar produtos vinculados ao fornecedor', async ({ request, authToken }) => {
+      await allure.severity('blocker');
+  await allure.description('Teste crítico de autenticação');
         });
 
         test('Deve retornar lista vazia quando fornecedor não possui produtos', async ({ request, authToken }) => {
+         await allure.severity('critical');
+  await allure.epic('Gestão de Usuários');
+  await allure.feature('Cadastro');
         });
 
         test('Deve incluir dados relacionais como categoria do produto', async ({ request, authToken }) => {
+        await allure.severity('trivial');
         });
 
         test('Deve retornar 404 quando fornecedor não existir', async ({ request, authToken }) => {
+        
         });
 
         test('Deve validar ID como número positivo', async ({ request, authToken }) => {
+       
         });
 
         test('Deve exigir autenticação para listagem de produtos', async ({ request }) => {
