@@ -29,11 +29,11 @@
     "fornecedor_inexistente": {
         "tipo": "erro",
         "dados": {
-            "id": 124
+            "id": 1240
         },
         "esperado": {
             "status": 404,
-            "mensagem": "Fornecedor com ID 124 não encontrado."
+            "mensagem": "Fornecedor com ID 1240 não encontrado."
         }
     },
     "fornecedor_excluido": {

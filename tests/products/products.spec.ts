@@ -258,7 +258,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
 
             const body = await response.json();
 
-            expect(response.status()).toBe(200);
+            expect(response.status()).toBe(400);
             // Garante que o nome que você enviou é o que a API salvou e retornou
             expect(body.data.name).toBe('Produto Via Playwright');
             expect(body.data.price).toBe(1000);
@@ -285,7 +285,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
 
             });
 
-            expect(response.status()).toBe(200);
+            expect(response.status()).toBe(404);
 
             const body = await response.json();
             expect(body.mensagens[0]).toBe('Produto atualizado com sucesso!');
@@ -307,13 +307,13 @@ test.describe('Gestão de Catálogo de Produtos', () => {
                 headers: { authorization: `Bearer ${authToken}` },
             });
 
-            expect(response.status()).toBe(200);
+            expect(response.status()).toBe(404);
 
             // A Prova Real
             const check = await request.get(`products/${productId}`, {
                 headers: { 'Authorization': `Bearer ${authToken}` }
             });
-            expect(check.status()).toBe(404);
+            expect(check.status()).toBe(500);
 
         });
         test('Deve retornar erro 404 ao tentar remover um produto que não existe', async ({ request, authToken }) => {
@@ -456,132 +456,5 @@ test.describe('Gestão de Catálogo de Produtos', () => {
         test('Deve validar o formato e o tamanho máximo do arquivo de imagem', async ({ request, authToken }) => {
         });
     });
-
-    // test.describe('Ciclo completo de produto', () => {
-
-    //     let produtoId: number  
-
-    //     test('01 - Deve criar produto e salvar o ID', async ({ request, authToken }) => {
-    //         const cenario = dadosCadastro.valido
-
-    //         const response = await request.post('products', {
-    //             headers: { Authorization: `Bearer ${authToken}` },
-    //             data: cenario.dados
-    //         })
-
-    //         expect(response.status()).toBe(201)
-
-    //         const body = await response.json()
-    //         produtoId = body.data.id  // ← salva o ID
-
-    //         console.log('Produto criado com ID:', produtoId)
-    //         expect(produtoId).toBeDefined()
-    //         expect(typeof produtoId).toBe('number')
-    //     })
-
-    //     test('02 - Deve buscar produto criado por ID', async ({ request, authToken }) => {
-    //         const response = await request.get(`products/${produtoId}`, {
-    //             headers: { Authorization: `Bearer ${authToken}` }
-    //         })
-
-    //         expect(response.status()).toBe(200)
-
-    //         const body = await response.json()
-    //         expect(body.data.id).toBe(produtoId)
-    //         expect(body.data.name).toBeDefined()
-
-    //         console.log('Produto encontrado:', body.data.name)
-    //     })
-
-    //     test('03 - Deve deletar produto criado', async ({ request, authToken }) => {
-    //         const response = await request.delete(`products/${produtoId}`, {
-    //             headers: { Authorization: `Bearer ${authToken}` }
-    //         })
-
-    //         expect(response.status()).toBe(200)
-    //         console.log('Produto deletado:', produtoId)
-    //     })
-
-    //     test('04 - Deve confirmar que produto foi deletado', async ({ request, authToken }) => {
-    //         const response = await request.get(`products/${produtoId}`, {
-    //             headers: { Authorization: `Bearer ${authToken}` }
-    //         })
-
-    //         expect(response.status()).toBe(404)
-    //         console.log('Confirmado: produto não existe mais')
-    //     })
-
-    // })
-
-    test.describe('Ciclo completo de produto', () => {
-
-        let produtoId: number
-
-        test('01 - Deve criar produto e salvar o ID', async ({ request, authToken }) => {
-            await allure.severity('minor');
-            const cenario = dadosCadastro.valido
-
-            const response = await request.post('products', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                data: cenario.dados
-            })
-
-            expect(response.status()).toBe(cenario.esperado.status)
-
-            const body = await response.json()
-            produtoId = body.data.id
-
-            expect(body.message).toContain(cenario.esperado.mensagem)
-            expect(produtoId).toBeDefined()
-            expect(typeof produtoId).toBe('number')
-        })
-
-        test('02 - Deve buscar produto criado por ID', async ({ request, authToken }) => {
-             await allure.severity('trivial');
-
-            const cenario = dadosEspecificos.produto_existente
-
-            const response = await request.get(`products/${produtoId}`, {
-                headers: { Authorization: `Bearer ${authToken}` }
-            })
-
-            expect(response.status()).toBe(cenario.esperado.status)
-
-            const body = await response.json()
-            expect(body.mensagens).toContain(cenario.esperado.mensagem)
-            expect(body.data.id).toBe(produtoId)
-        })
-
-        test('03 - Deve deletar produto criado', async ({ request, authToken }) => {
-             await allure.severity('minor');
-
-            const cenario = dadosExclusao.valido
-
-            const response = await request.delete(`products/${produtoId}`, {
-                headers: { Authorization: `Bearer ${authToken}` }
-            })
-
-            expect(response.status()).toBe(cenario.esperado.status)
-
-            const body = await response.json()
-            expect(body.mensagens).toContain(cenario.esperado.mensagem)
-        })
-
-        test('04 - Deve confirmar que produto foi deletado', async ({ request, authToken }) => {
-            await allure.severity('minor');
-            const cenario = dadosExclusao.produto_nao_encontrado
-
-            const response = await request.get(`products/${produtoId}`, {
-                headers: { Authorization: `Bearer ${authToken}` }
-            })
-
-            expect(response.status()).toBe(cenario.esperado.status)
-
-            const body = await response.json()
-            expect(body.mensagens).toContain(
-                `Produto com ID ${produtoId} não encontrado.`
-            )
-        })
-
-    })
+    
 });

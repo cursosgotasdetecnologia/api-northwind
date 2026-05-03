@@ -148,5 +148,80 @@
             "status": 400,
             "mensagem": "Nome da empresa é obrigatório."
         }
+    },
+    "fornecedor_telefone_obrigatorio": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutions Ltda",
+            "contact_name": "Carlos Silva",
+            "email": "carlos@tech.com",
+            "phone": null,
+            "cnpj": "98765432100199",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Telefone do fornecedor é obrigatório."
+        }
+    },
+    "fornecedor_uf_obrigatorio": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutions Ltda",
+            "contact_name": "Carlos Silva",
+            "email": "carlos@tech.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": "98765432100199",
+            "uf": null
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "UF do fornecedor é obrigatória."
+        }
+    },
+    "fornecedor_phone_formato_invalido": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutions Ltda",
+            "contact_name": "Carlos Silva",
+            "email": "carlos@tech.com",
+            "phone": "123",
+            "cnpj": "98765432100199",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Telefone inválido. Informe apenas os números (10 ou 11 dígitos)."
+        }
+    },
+    "fornecedor_uf_tamanho_invalido": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutions Ltda",
+            "contact_name": "Carlos Silva",
+            "email": "carlos@tech.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": "98765432100199",
+            "uf": "SPA"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "UF inválida. Informe a sigla de 2 letras do estado (ex: SP, RJ, MG)."
+        }
+    },
+    "fornecedor_contact_name_vazio": {
+        "tipo": "erro",
+        "dados": {
+            "company_name": "Tech Solutions Ltda",
+            "contact_name": "",
+            "email": "carlos@tech.com",
+            "phone": "(11) 98765-4321",
+            "cnpj": "98765432100199",
+            "uf": "SP"
+        },
+        "esperado": {
+            "status": 400,
+            "mensagem": "Nome do contato é obrigatório."
+        }
     }
 }

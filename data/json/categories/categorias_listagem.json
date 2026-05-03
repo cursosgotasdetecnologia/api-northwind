@@ -14,7 +14,7 @@
         "tipo": "erro",
         "esperado": {
             "status": 200,
-            "mensagem": "10 categorias carregadas com sucesso! (Página 1 de 5)"
+            "mensagem": "10 categorias carregadas com sucesso! (Página 1 de 6)"
         }
     },
     "listagem_sem_token": {
