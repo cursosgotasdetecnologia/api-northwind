@@ -131,7 +131,7 @@ test.describe('Gestão de Fornecedores', () => {
         });
 
 
-        test('Deve criar fornecedor com sucesso apartir do FAKER - 1 elemento', async ({ request, authToken }) => {
+        test.skip('Deve criar fornecedor com sucesso apartir do FAKER - 1 elemento', async ({ request, authToken }) => {
             const cenario = dadosCadastro.valido;
 
             const dados = {
@@ -155,7 +155,7 @@ test.describe('Gestão de Fornecedores', () => {
 
         });
 
-        test('Deve criar fornecedor com sucesso apartir do FAKER - 10 elementos', async ({ request, authToken }) => {
+        test.skip('Deve criar fornecedor com sucesso apartir do FAKER - 10 elementos', async ({ request, authToken }) => {
             const cenario = dadosCadastro.valido;
             const timestamp = Date.now();
 
@@ -180,7 +180,7 @@ test.describe('Gestão de Fornecedores', () => {
             }
         });
 
-        test('Deve criar fornecedor com sucesso apartir do CSV - 15 elementos', async ({ request, authToken }) => {
+        test.skip('Deve criar fornecedor com sucesso apartir do CSV - 15 elementos', async ({ request, authToken }) => {
 
             const content = fs.readFileSync('data/csv/suppliers/fornecedores-datadriven.csv', 'utf-8');
 

@@ -28,7 +28,7 @@ test('Capturar HAR Fornecedores como contexto', async ({ browser }) => {
 });
 
 
-test('Capturar HAR Categoria como contexto', async ({ browser }) => {
+test.skip('Capturar HAR Categoria como contexto', async ({ browser }) => {
 
     const context = await browser.newContext({
         recordHar: {

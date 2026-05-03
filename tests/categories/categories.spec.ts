@@ -4,8 +4,11 @@ import dadosExclusao from '../../data/json/categories/categorias_exclusao.json';
 import dadosEspecificos from '../../data/json/categories/categorias_especificas.json';
 import dadosAtualizacao from '../../data/json/categories/categorias_atualizacao.json';
 import dadosListagem from '../../data/json/categories/categorias_listagem.json';
+import dadosFiltros from '../../data/json/products/produtos_dados_filtros.json';
 
 import { validarStatusEMensagem } from '../../utils/commons.assertion';
+import { validarCategoriaCriada, validarCategoriaPersistida } from '../../utils/categorie.assertion';
+import { criarCategoria, atualizarCategoriaCompleta, deletarCategoria } from '../../services/categories.service';
 
 test.describe('Gestão de Categorias', () => {
 
@@ -42,9 +45,9 @@ test.describe('Gestão de Categorias', () => {
             console.log('Status Code:', response.status());
 
         });
-       
 
-        
+
+
 
     });
 
@@ -152,21 +155,73 @@ test.describe('Gestão de Categorias', () => {
     test.describe('Produtos da Categoria', () => {
 
         test('Deve listar produtos vinculados à categoria', async ({ request, authToken }) => {
+            const cenario = dadosFiltros.produtos_categoria10;
+
+            const response = await request.get('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                params: cenario.params
+            });
+
+            const body = await response.json();
+
+            expect(response.status()).toBe(cenario.esperado.status);
+            expect(body.mensagens).toContain(cenario.esperado.mensagem);
         });
 
         test('Deve retornar lista vazia quando não houver produtos', async ({ request, authToken }) => {
+            const response = await request.get('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                params: { category_id: 999 }
+            });
+
+            const body = await response.json();
+            expect(response.status()).toBe(404);
+            expect(body.mensagens).toContain('Nenhum produto encontrado para os filtros aplicados.');
         });
 
         test('Deve incluir dados relacionais como nome do fornecedor', async ({ request, authToken }) => {
+            const response = await request.get('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                params: { category_id: 10 }
+            });
+
+            const body = await response.json();
+            expect(response.status()).toBe(200);
+            expect(body.data.length).toBeGreaterThan(0);
+            expect(body.data[0]).toHaveProperty('suppliers');
+            expect(body.data[0].suppliers).toHaveProperty('company_name');
         });
 
         test('Deve retornar 404 quando categoria não existir', async ({ request, authToken }) => {
+            const response = await request.get('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                params: { category_id: 99999 }
+            });
+
+            const body = await response.json();
+            expect(response.status()).toBe(404);
+            expect(body.mensagens).toContain('Nenhum produto encontrado para os filtros aplicados.');
         });
 
         test('Deve validar ID como número positivo', async ({ request, authToken }) => {
+            const response = await request.get('products', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                params: { category_id: -1 }
+            });
+
+            const body = await response.json();
+            expect(response.status()).toBe(404);
+            expect(body.mensagens).toContain('Nenhum produto encontrado para os filtros aplicados.');
         });
 
         test('Deve exigir autenticação para listagem de produtos', async ({ request }) => {
+            const response = await request.get('products', {
+                params: { category_id: 10 }
+            });
+
+            const body = await response.json();
+            expect(response.status()).toBe(401);
+            expect(body.mensagens).toContain('Token ausente');
         });
 
     });
@@ -174,9 +229,82 @@ test.describe('Gestão de Categorias', () => {
     test.describe('Atualização Completa de Categoria', () => {
 
         test('Deve atualizar todos os dados da categoria com sucesso', async ({ request, authToken }) => {
+            const unique = Math.floor(Math.random() * 1000);
+
+            const novaCategoria = {
+                ...dadosCadastro.valido.dados,
+                name: `Cat Atualizar ${unique}`,
+                description: `Descricao Atualizar ${Date.now()}`
+            };
+
+            const createResponse = await criarCategoria(request, authToken, novaCategoria);
+            const createBody = await createResponse.json();
+
+            validarStatusEMensagem(createResponse, createBody, dadosCadastro.valido.esperado);
+            validarCategoriaCriada(createBody);
+
+            const categoriaAtualizada = {
+                name: `Cat Atualizado ${unique}`,
+                description: `Descricao Atualizada ${Date.now()}`
+            };
+
+            const updateResponse = await atualizarCategoriaCompleta(
+                request,
+                authToken,
+                createBody.data.id,
+                categoriaAtualizada
+            );
+            const updateBody = await updateResponse.json();
+
+            validarStatusEMensagem(updateResponse, updateBody, {
+                status: 200,
+                mensagem: 'Categoria atualizada com sucesso!'
+            });
+            validarCategoriaPersistida(updateBody, categoriaAtualizada);
+            expect(updateBody.data).toHaveProperty('id', createBody.data.id);
+            expect(typeof updateBody.data.slug).toBe('string');
+
+            await deletarCategoria(request, authToken, createBody.data.id);
         });
 
         test('Deve regerar slug automaticamente quando nome for alterado', async ({ request, authToken }) => {
+            const unique = Math.floor(Math.random() * 1000);
+
+            const novaCategoria = {
+                ...dadosCadastro.valido.dados,
+                name: `Categoria Slug ${unique}`,
+                description: `Descricao Slug ${Date.now()}`
+            };
+
+            const createResponse = await criarCategoria(request, authToken, novaCategoria);
+            const createBody = await createResponse.json();
+
+            validarStatusEMensagem(createResponse, createBody, dadosCadastro.valido.esperado);
+
+            const categoriaId = createBody.data.id;
+            const slugOriginal = createBody.data.slug;
+            const novoNome = `Categoria Alterado ${unique}`;
+            const expectedSlug = novoNome
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '');
+
+            const updateResponse = await atualizarCategoriaCompleta(request, authToken, categoriaId, {
+                name: novoNome,
+                description: novaCategoria.description
+            });
+            const updateBody = await updateResponse.json();
+
+            validarStatusEMensagem(updateResponse, updateBody, {
+                status: 200,
+                mensagem: 'Categoria atualizada com sucesso!'
+            });
+            expect(updateBody.data).toBeDefined();
+            expect(typeof updateBody.data.slug).toBe('string');
+            expect(updateBody.data.slug).not.toBe(slugOriginal);
+            expect(updateBody.data.slug).toBe(expectedSlug);
+
+            await deletarCategoria(request, authToken, categoriaId);
         });
 
         test('Deve validar unicidade do nome na atualização', async ({ request, authToken }) => {
