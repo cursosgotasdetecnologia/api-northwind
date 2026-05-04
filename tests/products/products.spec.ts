@@ -106,20 +106,31 @@ test.describe('Gestão de Catálogo de Produtos', () => {
         test('Deve impedir criar um produto com fornecedor inexistente', async ({ request, authToken }) => {
             const cenario = dadosCadastro.fornecedor_inexistente;
 
-            const response = await request.post('products', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                data: cenario.dados
-            });
+             const timestamp = Date.now(); // ← Gera número único por execução
+            
+             const dados = {
+                ...cenario.dados,
+                name: `Produto ${timestamp}`,
+                sku: `SKU-${timestamp}`
+            };
+            const response = await criarProduto(request, authToken, dados);
+
+
+
+
+            //console.log('🔍 Status real retornado:', response.status());
+             
             const body = await response.json();
+
+            //console.log('📦 Body real:', body);
+
+           
             validarStatusEMensagem(response, body, cenario.esperado);
         });
         test('Deve impedir criar um produto com categoria inexistente', async ({ request, authToken }) => {
             const cenario = dadosCadastro.categoria_inexistente;
 
-            const response = await request.post('products', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                data: cenario.dados
-            });
+            const response = await criarProduto(request, authToken, cenario.dados);
             const body = await response.json();
             validarStatusEMensagem(response, body, cenario.esperado);
         });
@@ -456,5 +467,5 @@ test.describe('Gestão de Catálogo de Produtos', () => {
         test('Deve validar o formato e o tamanho máximo do arquivo de imagem', async ({ request, authToken }) => {
         });
     });
-    
+
 });

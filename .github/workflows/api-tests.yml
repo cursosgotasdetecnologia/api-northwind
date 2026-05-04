@@ -45,6 +45,7 @@ jobs:
           name: allure-report
           path: allure-report/
           retention-days: 7
+          
       - name: Deploy to GitHub Pages
         if: success() && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
