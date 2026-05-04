@@ -258,7 +258,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
 
             const body = await response.json();
 
-            expect(response.status()).toBe(400);
+            expect(response.status()).toBe(200);
             // Garante que o nome que você enviou é o que a API salvou e retornou
             expect(body.data.name).toBe('Produto Via Playwright');
             expect(body.data.price).toBe(1000);
@@ -285,7 +285,7 @@ test.describe('Gestão de Catálogo de Produtos', () => {
 
             });
 
-            expect(response.status()).toBe(404);
+            expect(response.status()).toBe(200);
 
             const body = await response.json();
             expect(body.mensagens[0]).toBe('Produto atualizado com sucesso!');
