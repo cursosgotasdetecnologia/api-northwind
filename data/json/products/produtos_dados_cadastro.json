@@ -52,7 +52,7 @@
             "stock_quantity": 50,
             "sku": "MteGP-2024",
             "category_id": 10,
-            "supplier_id": 989
+            "supplier_id": 4000
         },
         "esperado": {
             "status": 400,
