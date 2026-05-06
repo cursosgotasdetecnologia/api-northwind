@@ -90,7 +90,7 @@ schemas/        # Esquemas de validação JSON
 
 ## 📈 Relatório ao Vivo
 
-Veja o relatório ao vivo → [Allure Report](https://cursosgotasdetecnologia.github.io/api-northwind/allure/)
+Veja o relatório ao vivo → [Allure Report]([https://cursosgotasdetecnologia.github.io/api-northwind/allure](https://cursosgotasdetecnologia.github.io/api-northwind/)
 
 ## 🛠️ Tecnologias Utilizadas
 
