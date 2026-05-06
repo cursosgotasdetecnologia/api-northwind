@@ -82,10 +82,11 @@ schemas/        # Esquemas de validação JSON
 | Cobertura de Código    | 95%    |
 | Cobertura de Endpoints | 100%   |
 
-## 
-![Pipeline verde](./screenshots/pipeline.png)
+## TESTS PASSING
+![Pipeline verde](./screenshots/pipeline.PNG)
 
-![Relatório Allure](./screenshots/allure-report.png)
+## PRINT DASHBOARD
+![Relatório Allure](./screenshots/allure-report.PNG)
 
 ## 📈 Relatório ao Vivo
 
