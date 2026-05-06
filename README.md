@@ -1,5 +1,4 @@
 # API Northwind - Testes Automatizados
-![CI](https://github.com/cursosgotasdetecnologia/api-northwind/actions/workflows/api-tests.yml/badge.svg)
 
 [![QA Pipeline - API Tests](https://github.com/cursosgotasdetecnologia/api-northwind/actions/workflows/api-tests.yml/badge.svg?branch=main&event=push)](https://github.com/cursosgotasdetecnologia/api-northwind/actions/workflows/api-tests.yml)
 
