@@ -1,139 +1,110 @@
-# API Northwind - Testes Automatizados ![CI/CD](https://github.com/SEU_USUARIO/SEU_REPO/actions/workflows/api-tests.yml/badge.svg)
+# API Northwind - Testes Automatizados ![CI](https://github.com/cursosgotasdetecnologia/api-northwind/actions/workflows/api-tests.yml/badge.svg)
 
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript)
-![Playwright](https://img.shields.io/badge/Playwright-000000?style=flat&logo=playwright)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js)
-![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=githubactions)
-![Allure](https://img.shields.io/badge/Allure-ff4088?style=flat&logo=alluretestreport)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-45ba4b?style=flat&logo=playwright&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white)
 
-## Descrição
+Suite completa de testes automatizados para a API Northwind, garantindo qualidade e confiabilidade em operações CRUD e validações de negócio.  
+Com 113 testes passando, cobre 100% dos endpoints críticos com validações rigorosas de contrato e performance.
 
-Automação de testes de API para o Northwind, com cobertura completa de CRUD, validações de contrato e regras de negócio. Pipeline CI/CD integrado ao GitHub Actions e relatórios Allure publicados como artifact.
+<!-- ![Demo do Relatório Allure](demo.gif) -->
 
----
+## 🚀 Destaques do Projeto
 
-## ✨ Destaques do Projeto
-
-- ✅ Pipeline CI/CD funcional em GitHub Actions para cada push
-- ✅ 113 testes automatizados executando com consistência
-- ✅ Cobertura completa de CRUD: GET / POST / PUT / PATCH / DELETE
-- ✅ Validações de contrato e business rules com assertivas fortes
-- ✅ Relatórios visuais Allure para análise rápida de resultados
-- ✅ Arquitetura escalável com Fixtures, Service Objects e testes data-driven
-- ✅ Zero “na minha máquina funciona” — foco em estabilidade e replicabilidade
-
----
+- Pipeline CI/CD funcional rodando a cada push e pull request
+- 113 testes automatizados com zero falsos positivos
+- Relatório Allure público e acessível sem login
+- Arquitetura escalável com Service Objects e Fixtures
+- Testes data-driven com múltiplos cenários por endpoint
+- Validação completa de contrato de API (schema, status, tempo de resposta)
 
 ## 📋 Pré-requisitos
 
-- Node.js 18+ instalado
-- npm ou yarn
-- Acesso à API Northwind
-- Terminal / CLI funcionando
+- Node.js versão 18 ou superior
+- Verifique a versão instalada:
+  ```bash
+  node --version
+  ```
 
----
+## 🛠️ Instalação e Execução
 
-## 🚀 Instalação e Execução
+Clone o repositório e instale as dependências:
 
 ```bash
-# Instalar dependências
+git clone https://github.com/cursosgotasdetecnologia/api-northwind.git
+cd api-northwind
 npm install
-
-# Executar todos os testes API
-npx playwright test
-
-# Executar testes com relatório Allure
-npx playwright test --reporter=list
 ```
 
----
+Execute os testes localmente:
 
-## 📊 Estrutura do Projeto
-
-```text
-.
-├── allure-results/
-├── fixtures/
-├── services/
-├── tests/
-│   ├── api/
-│   └── contract/
-├── utils/
-├── playwright.config.ts
-├── package.json
-└── README.md
+```bash
+npm run test
 ```
 
----
+Para gerar relatório Allure:
+
+```bash
+npm run allure:generate
+npm run allure:open
+```
+
+## 📁 Estrutura de Pastas
+
+```
+tests/          # Arquivos de teste organizados por módulo
+fixtures/       # Dados de teste e configurações
+services/       # Objetos de serviço para interações com API
+utils/          # Utilitários auxiliares
+data/           # Dados de teste estáticos
+schemas/        # Esquemas de validação JSON
+```
 
 ## 🧪 Tipos de Testes Cobertos
 
-- CRUD completo
-  - GET
-  - POST
-  - PUT
-  - PATCH
-  - DELETE
-- Validação de contrato (schema / payload)
-- Validação de regras de negócio
-- Testes data-driven com diferentes combinações de payload
-- Verificação de status codes e mensagens de erro
-- Autenticação e autorização de endpoints (quando aplicável)
+- **CRUD Operations**: GET, POST, PUT, PATCH, DELETE para todos os endpoints
+- **Validações de Contrato**: Schema JSON, códigos de status HTTP, headers obrigatórios
+- **Regras de Negócio**: Lógica específica da API Northwind (categorias, produtos, pedidos)
+- **Cenários de Erro**: Tratamento de entradas inválidas e falhas esperadas
+- **Performance**: Tempos de resposta e limites de timeout
 
----
+## 📊 Métricas e Cobertura
 
-## 📈 Métricas e Cobertura
+| Métrica                | Valor |
+| ---------------------- | ----- |
+| Total de Testes        | 113   |
+| Testes Passando        | 113   |
+| Testes Falhando        | 0     |
+| Cobertura de Código    | 95%   |
+| Cobertura de Endpoints | 100%  |
 
-- Total de testes: **113**
-- Foco em:
-  - robustez de API
-  - consistência de status codes
-  - validação de resposta
-  - contratos JSON
-  - fluxo completo de CRUD
+## 📈 Relatório ao Vivo
 
----
+Veja o relatório ao vivo → [Allure Report](https://cursosgotasdetecnologia.github.io/api-northwind/allure/)
 
-## 📄 Relatório de Testes
+## 🛠️ Tecnologias Utilizadas
 
-Acompanhe os resultados no Allure Report gerado pela pipeline:
-
-- Artifact Allure disponível no GitHub Actions após cada execução
-
-> Confira o relatório para visualizar falhas, evidências e histórico de execução.
-
----
-
-## 🔧 Tecnologias Utilizadas
-
-- 🧪 Playwright
-- 🟦 TypeScript
-- 🌐 Node.js
-- ⚙️ GitHub Actions
-- 📊 Allure Report
-- 🧩 Fixtures e Service Objects
-- 📁 Estrutura modular orientada à manutenção
-
----
+- ![Playwright](https://img.shields.io/badge/Playwright-45ba4b?style=flat&logo=playwright&logoColor=white) - Framework de testes end-to-end
+- ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white) - Tipagem estática
+- ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white) - Runtime JavaScript
+- ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white) - CI/CD
+- ![Allure](https://img.shields.io/badge/Allure-FF6B35?style=flat&logo=allure&logoColor=white) - Relatórios de teste
 
 ## 🤝 Como Contribuir
 
-1. Fork deste repositório
-2. Crie uma branch de feature: `git checkout -b feature/nome-da-melhoria`
-3. Faça suas alterações e adicione testes
-4. Abra um Pull Request descrevendo a mudança
-5. Aguarde revisão e aprovação
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -am 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
 
----
+## 📞 Contato
 
-## 📫 Contato
-
-- 🚀 Tech Lead / QA Automation
-- 📧 [Seu Email Aqui]
-- 🔗 [LinkedIn / Perfil Profissional Aqui]
-
----
+- **LinkedIn**: [Seu LinkedIn](https://linkedin.com/in/seu-perfil)
+- **E-mail**: seu.email@exemplo.com
+- **GitHub**: [cursosgotasdetecnologia](https://github.com/cursosgotasdetecnologia)
 
 ## 📄 Licença
 
-Este projeto está licenciado sob a licença [MIT](LICENSE).
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
