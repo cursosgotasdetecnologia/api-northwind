@@ -71,13 +71,13 @@ schemas/        # Esquemas de validação JSON
 
 ## 📊 Métricas e Cobertura
 
-| Métrica                | Valor |
-| ---------------------- | ----- |
-| Total de Testes        | 113   |
-| Testes Passando        | 113   |
-| Testes Falhando        | 0     |
-| Cobertura de Código    | 95%   |
-| Cobertura de Endpoints | 100%  |
+| Métrica                | Valor  |
+| ---------------------- | -----  |
+| Total de Testes        | 113    |
+| Testes Passando        | 113    |
+| Testes Falhando        | 0      |
+| Cobertura de Código    | 95%    |
+| Cobertura de Endpoints | 100%   |
 
 ## 📈 Relatório ao Vivo
 
