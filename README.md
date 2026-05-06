@@ -1,4 +1,8 @@
-# API Northwind - Testes Automatizados ![CI](https://github.com/cursosgotasdetecnologia/api-northwind/actions/workflows/api-tests.yml/badge.svg)
+# API Northwind - Testes Automatizados
+![CI](https://github.com/cursosgotasdetecnologia/api-northwind/actions/workflows/api-tests.yml/badge.svg)
+
+[![QA Pipeline - API Tests](https://github.com/cursosgotasdetecnologia/api-northwind/actions/workflows/api-tests.yml/badge.svg?branch=main&event=push)](https://github.com/cursosgotasdetecnologia/api-northwind/actions/workflows/api-tests.yml)
+
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-45ba4b?style=flat&logo=playwright&logoColor=white)
