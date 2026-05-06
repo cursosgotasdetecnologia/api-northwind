@@ -82,6 +82,11 @@ schemas/        # Esquemas de validação JSON
 | Cobertura de Código    | 95%    |
 | Cobertura de Endpoints | 100%   |
 
+## 
+![Pipeline verde](./screenshots/pipeline.png)
+
+![Relatório Allure](./screenshots/allure-report.png)
+
 ## 📈 Relatório ao Vivo
 
 Veja o relatório ao vivo → [Allure Report](https://cursosgotasdetecnologia.github.io/api-northwind/allure/)
