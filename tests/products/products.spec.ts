@@ -16,6 +16,7 @@ import { validarProdutoPersistido } from '../../utils/product.assertion';
 import { listarProdutos } from '../../services/product.service';
 import { criarProduto } from '../../services/product.service';
 import { allure } from 'allure-playwright';
+import fs from 'fs';
 
 
 test.describe('Gestão de Catálogo de Produtos', () => {
@@ -106,9 +107,9 @@ test.describe('Gestão de Catálogo de Produtos', () => {
         test('Deve impedir criar um produto com fornecedor inexistente', async ({ request, authToken }) => {
             const cenario = dadosCadastro.fornecedor_inexistente;
 
-             const timestamp = Date.now(); // ← Gera número único por execução
-            
-             const dados = {
+            const timestamp = Date.now(); // ← Gera número único por execução
+
+            const dados = {
                 ...cenario.dados,
                 name: `Produto ${timestamp}`,
                 sku: `SKU-${timestamp}`
@@ -119,12 +120,12 @@ test.describe('Gestão de Catálogo de Produtos', () => {
 
 
             //console.log('🔍 Status real retornado:', response.status());
-             
+
             const body = await response.json();
 
             //console.log('📦 Body real:', body);
 
-           
+
             validarStatusEMensagem(response, body, cenario.esperado);
         });
         test('Deve impedir criar um produto com categoria inexistente', async ({ request, authToken }) => {
@@ -462,9 +463,143 @@ test.describe('Gestão de Catálogo de Produtos', () => {
     });
 
     test.describe('Gerenciamento de Mídia', () => {
-        test('Deve permitir o upload de imagens PNG para um produto específico', async ({ request, authToken }) => {
+
+        test('Deve realizar upload de imagem PNG com sucesso com buffer', async ({ request, authToken }) => {
+            // Gerando um "falso" PNG minúsculo na memória usando Buffer (Magic Bytes do PNG)
+            const dummyPngBuffer = Buffer.from('89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000a49444154789c63000100000500010d0a2db40000000049454e44ae426082', 'hex');
+
+            const response = await request.post('products/363/image', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                // O Segredo do Upload no Playwright está aqui:
+                multipart: {
+                    file: {
+                        name: 'pipeline.png',
+                        mimeType: 'image/png',
+                        buffer: dummyPngBuffer
+                    }
+                }
+            });
+            const body = await response.json();
+            // Usando o seu validador customizado:
+            validarStatusEMensagem(response, body, { status: 200, mensagem: 'Upload da imagem realizado com sucesso!' });
         });
-        test('Deve validar o formato e o tamanho máximo do arquivo de imagem', async ({ request, authToken }) => {
+        test('Deve rejeitar upload de imagem com formato inválido (JPG) com buffer', async ({ request, authToken }) => {
+            // Criando um arquivo JPG falso
+            const dummyJpgBuffer = Buffer.from('ffd8ffe000104a46494600010101004800480000ffdb0043', 'hex');
+            const response = await request.post('products/305/image', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                multipart: {
+                    file: {
+                        name: 'arquivo-proibido.jpg',
+                        mimeType: 'image/jpeg',
+                        buffer: dummyJpgBuffer
+                    }
+                }
+            });
+            const body = await response.json();
+            validarStatusEMensagem(response, body, { status: 400, mensagem: 'Apenas arquivos PNG são permitidos para imagem do produto.' });
+        });
+        test('Deve rejeitar upload de imagem maior que 2MB usando arquivo real AnexoG.png', async ({ request, authToken }) => {
+            const caminhoImagem = './assets/AnexoG.png';
+            const bufferArquivo = fs.readFileSync(caminhoImagem);
+
+            const response = await request.post('products/363/image', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                multipart: {
+                    file: {
+                        name: 'AnexoG.png',
+                        mimeType: 'image/png',
+                        buffer: bufferArquivo
+                    }
+                }
+            });
+            const body = await response.json();
+
+            expect(response.status()).toBe(400);
+            expect(body.mensagens[0]).toContain('Arquivo muito grande. Tamanho máximo permitido: 2MB');
+        });
+        test('Deve realizar upload de manual PDF com sucesso', async ({ request, authToken }) => {
+            // Simulando a estrutura básica de um PDF em texto
+            const dummyPdfBuffer = Buffer.from('%PDF-1.4\n1 0 obj\n<<\n/Title (Dummy PDF)\n>>\nendobj\n', 'utf-8');
+            const response = await request.post('products/363/pdf', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                multipart: {
+                    file: {
+                        name: 'manual-instrucoes.pdf',
+                        mimeType: 'application/pdf',
+                        buffer: dummyPdfBuffer
+                    }
+                }
+            });
+            const body = await response.json();
+            validarStatusEMensagem(response, body, { status: 200, mensagem: 'Upload do PDF realizado com sucesso!' });
+        });
+        test('Deve rejeitar upload de documento com extensão inválida (TXT)', async ({ request, authToken }) => {
+            const caminhoTxt = './assets/Anexo.txt';
+            const arquivoTxt = fs.readFileSync(caminhoTxt);
+            const response = await request.post('products/363/pdf', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                multipart: {
+                    file: {
+                        name: 'Anexo.txt',
+                        mimeType: 'text/plain',
+                        buffer: arquivoTxt
+                    }
+                }
+            });
+            const body = await response.json();
+            validarStatusEMensagem(response, body, { status: 400, mensagem: 'Apenas arquivos PDF são permitidos para documentos do produto.' });
+        });
+    });
+
+    test.describe('Upload com Arquivos Reais (Imagem e PDF)', () => {
+
+         // ==========================================
+        // TESTES DE UPLOAD DE IMAGEM (PNG)
+        // ==========================================
+        test('Deve realizar upload de imagem PNG com sucesso usando arquivo real', async ({ request, authToken }) => {
+            const caminhoImagem = 'assets/pipeline.PNG';
+            const arquivoFisico = fs.readFileSync(caminhoImagem);
+
+            const response = await request.post('products/363/image', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                multipart: {
+                    file: {
+                        name: 'pipeline.PNG',
+                        mimeType: 'image/png',
+                        buffer: arquivoFisico
+                    }
+                }
+            });
+            const body = await response.json();
+
+            validarStatusEMensagem(response, body, {
+                status: 200,
+                mensagem: 'Upload da imagem realizado com sucesso!'
+            });
+
+
+        });
+        // ==========================================
+        // TESTES DE UPLOAD DE PDF
+        // ==========================================
+        test('Deve realizar upload de manual PDF com sucesso usando arquivo real', async ({ request, authToken }) => {
+            const caminhoPDF = 'assets/calculo.pdf';
+            const arquivoFisico = fs.readFileSync(caminhoPDF);
+
+            const response = await request.post('products/363/pdf', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                multipart: {
+                    file: {
+                        name: 'calculo.pdf',
+                        mimeType: 'application/pdf',
+                        buffer: arquivoFisico
+                    }
+                }
+            });
+            const body = await response.json();
+
+            validarStatusEMensagem(response, body, { status: 200, mensagem: 'Upload do PDF realizado com sucesso!' });
         });
     });
 
